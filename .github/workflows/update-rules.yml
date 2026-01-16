@@ -37,6 +37,7 @@ jobs:
         with:
           message: "chore: update reject.list from remote rules"
           add: "${{ env.OUTPUT_FILE }}"
+          token: "${{ secrets.AUTO_GEN_REJECTLIST}}"
           author_name: github-actions[bot]
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
           committer_name: github-actions[bot]
