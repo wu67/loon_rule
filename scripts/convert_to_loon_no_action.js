@@ -1,21 +1,14 @@
 #!/usr/bin/env node
 /**
- * scripts/convert_to_loon_no_action.js
- *
- * 从指定 JSON URL 拉取规则并转换为 Loon 格式（每行 TYPE,CONTENT），写入指定输出文件（默认 reject.list）。
- *
+ * 简洁版：使用全��� fetch 拉取 JSON 并输出 Loon 格式 TYPE,CONTENT 到指定文件（默认 reject.list）
  * 用法:
- *   node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE>
+ *   node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE> [--verbose]
  *
- * 默认 URL:
- *   https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json
- *
- * 注: 该脚本使用全局 fetch（Node 18+）。在 GitHub Actions 中使用 setup-node@v4 并指定 node-version >= 18。
+ * 要求 Node >= 18（GitHub Actions 中请设置 node-version: '18' 或更高）
  */
 import fs from "fs";
 import path from "path";
 import process from "process";
-import { fileURLToPath } from "url";
 
 const DEFAULT_URL = "https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json";
 const DEFAULT_OUTPUT = "reject.list";
@@ -49,7 +42,6 @@ function flattenJson(obj) {
     for (const e of obj) items.push(...flattenJson(e));
   } else if (typeof obj === "object") {
     const ruleKeys = new Set(["rule", "type", "value", "payload", "pattern", "domain", "content", "host"]);
-    // heuristic: 如果这个对象包含常见字段且不太大，认为它是一条规则对象
     const keys = Object.keys(obj);
     if (keys.some(k => ruleKeys.has(k)) && keys.length <= 30) {
       items.push(obj);
@@ -78,12 +70,10 @@ function toLoonLines(entry) {
       if (domain) lines.push(`DOMAIN-SUFFIX,${domain}`);
       return lines;
     }
-    // contains wildcard or special chars -> REGEX
     if (/[*\^\/\?\$\+\(\)\[\]\{\}\|]/.test(s)) {
       let pattern = s;
       if (pattern.startsWith("||")) {
         pattern = pattern.slice(2);
-        // escape then replace escaped \* -> .*
         pattern = escapeForRegex(pattern).replace(/\\\*/g, ".*").replace(/\\\^/g, "");
         const regex = `.*${pattern}.*`;
         lines.push(`REGEX,${regex}`);
@@ -111,7 +101,6 @@ function toLoonLines(entry) {
       lines.push(`DOMAIN-SUFFIX,${s_no_star}`);
       return lines;
     }
-    // fallback
     lines.push(`REGEX,${escapeForRegex(s)}`);
     return lines;
   } else if (typeof entry === "object" && entry !== null) {
@@ -163,59 +152,43 @@ function toLoonLines(entry) {
 async function fetchJson(url) {
   const res = await fetch(url, { method: "GET" });
   if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`);
-  const ct = (res.headers.get("content-type") || "");
-  if (ct.includes("application/json") || ct.includes("text/plain") || ct.includes("application/octet-stream")) {
-    return res.json();
-  }
-  // fallback try json
   return res.json();
 }
 
 async function main() {
-  try {
-    const opt = parseArgs();
-    if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`);
-    const jsonObj = await fetchJson(opt.url);
-    if (opt.verbose) console.error("[INFO] flattening and converting...");
-    const flat = flattenJson(jsonObj);
-    if (opt.verbose) console.error(`[INFO] found ${flat.length} raw entries`);
-    const seen = new Set();
-    const out = [];
-    for (const e of flat) {
-      try {
-        const lines = toLoonLines(e);
-        for (const ln of lines) {
-          if (!seen.has(ln)) {
-            seen.add(ln);
-            out.push(ln);
-          }
-        }
-      } catch (err) {
-        if (opt.verbose) console.error("[WARN] skip entry:", err);
+  const opt = parseArgs();
+  if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`);
+  const jsonObj = await fetchJson(opt.url);
+  if (opt.verbose) console.error("[INFO] flattening and converting...");
+  const flat = flattenJson(jsonObj);
+  if (opt.verbose) console.error(`[INFO] found ${flat.length} raw entries`);
+  const seen = new Set();
+  const out = [];
+  for (const e of flat) {
+    try {
+      const lines = toLoonLines(e);
+      for (const ln of lines) {
+        if (!seen.has(ln)) { seen.add(ln); out.push(ln); }
       }
+    } catch (err) {
+      if (opt.verbose) console.error("[WARN] skip entry:", err);
     }
-    const header = [
-      "# Converted by scripts/convert_to_loon_no_action.js",
-      `# Source: ${opt.url}`,
-      `# Rules: ${out.length}`,
-      "# Format: TYPE,CONTENT (no action column)",
-      ""
-    ];
-    const content = header.concat(out).join("\n") + "\n";
-    const outPath = path.resolve(process.cwd(), opt.output);
-    // ensure dir exists
-    const dir = path.dirname(outPath);
-    fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(outPath, content, { encoding: "utf8" });
-    if (opt.verbose) console.error(`[INFO] wrote ${out.length} rules to ${opt.output}`);
-  } catch (err) {
-    console.error("[ERROR]", err);
-    process.exit(2);
   }
+  const header = [
+    "# Converted by scripts/convert_to_loon_no_action.js",
+    `# Source: ${opt.url}`,
+    `# Rules: ${out.length}`,
+    "# Format: TYPE,CONTENT (no action column)",
+    ""
+  ];
+  const content = header.concat(out).join("\n") + "\n";
+  const outPath = path.resolve(process.cwd(), opt.output);
+  fs.mkdirSync(path.dirname(outPath) || ".", { recursive: true });
+  fs.writeFileSync(outPath, content, { encoding: "utf8" });
+  if (opt.verbose) console.error(`[INFO] wrote ${out.length} rules to ${opt.output}`);
 }
 
-// 修复入口检测：不要把 process.argv[1] 当作 URL 传入 fileURLToPath。
-// 在 ESM 下，比较 fileURLToPath(import.meta.url) 与 process.argv[1] 来判断是否作为主模块运行。
-if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  main();
+// 直接执行主函数（作为 CLI 脚本）
+if (import.meta.url) {
+  main().catch(err => { console.error("[ERROR]", err); process.exit(2); });
 }
