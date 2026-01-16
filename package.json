@@ -1,0 +1,12 @@
+{
+  "name": "loon-rule-updater",
+  "version": "1.0.0",
+  "description": "Convert sing-box rules JSON into Loon reject.list (TYPE,CONTENT) and commit via GitHub Actions",
+  "type": "module",
+  "scripts": {
+    "convert": "node scripts/convert_to_loon_no_action.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
