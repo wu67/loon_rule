@@ -1,10 +1,18 @@
 #!/usr/bin/env node
 /**
- * 简洁版：使用全��� fetch 拉取 JSON 并输出 Loon 格式 TYPE,CONTENT 到指定文件（默认 reject.list）
+ * scripts/convert_to_loon_no_action.js
+ *
+ * 仅解析 JSON 的 rules 数组中每个对象的三个数组属性：
+ *   - domain
+ *   - domain_suffix
+ *   - domain_keyword
+ *
+ * 并把它们转换为 Loon 格式的规则（TYPE,CONTENT）写入输出文件（默认 reject.list）。
+ *
  * 用法:
  *   node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE> [--verbose]
  *
- * 要求 Node >= 18（GitHub Actions 中请设置 node-version: '18' 或更高）
+ * 要求: Node >= 18（使用全局 fetch）
  */
 import fs from "fs";
 import path from "path";
@@ -29,124 +37,27 @@ function parseArgs() {
   return opt;
 }
 
-const RE_IP_CIDR = /^\d{1,3}(?:\.\d{1,3}){3}(?:\/\d{1,2})?$/;
-const RE_IP_RANGE = /^\d{1,3}(?:\.\d{1,3}){3}-\d{1,3}(?:\.\d{1,3}){3}$/;
-const RE_DOMAIN = /^(?:\*\.?){0,1}([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,63}$/;
-const RE_ADBLOCK_PREFIX = /^\|\|([^\/\^]+)\^?$/; // ||domain^
-const RE_COMMENT = /^\s*(!|#)/;
-
-function flattenJson(obj) {
-  const items = [];
-  if (obj === null || obj === undefined) return items;
-  if (Array.isArray(obj)) {
-    for (const e of obj) items.push(...flattenJson(e));
-  } else if (typeof obj === "object") {
-    const ruleKeys = new Set(["rule", "type", "value", "payload", "pattern", "domain", "content", "host"]);
-    const keys = Object.keys(obj);
-    if (keys.some(k => ruleKeys.has(k)) && keys.length <= 30) {
-      items.push(obj);
-    } else {
-      for (const v of Object.values(obj)) items.push(...flattenJson(v));
-    }
-  } else {
-    items.push(String(obj));
-  }
-  return items;
-}
-
-function escapeForRegex(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-function toLoonLines(entry) {
-  const lines = [];
-  if (typeof entry === "string") {
-    let s = entry.trim();
-    if (!s) return lines;
-    if (RE_COMMENT.test(s)) return lines;
-    const m = s.match(RE_ADBLOCK_PREFIX);
-    if (m) {
-      const domain = m[1].trim().replace(/^\.+/, "");
-      if (domain) lines.push(`DOMAIN-SUFFIX,${domain}`);
-      return lines;
-    }
-    if (/[*\^\/\?\$\+\(\)\[\]\{\}\|]/.test(s)) {
-      let pattern = s;
-      if (pattern.startsWith("||")) {
-        pattern = pattern.slice(2);
-        pattern = escapeForRegex(pattern).replace(/\\\*/g, ".*").replace(/\\\^/g, "");
-        const regex = `.*${pattern}.*`;
-        lines.push(`REGEX,${regex}`);
-      } else {
-        const regex = escapeForRegex(pattern).replace(/\\\*/g, ".*");
-        lines.push(`REGEX,${regex}`);
-      }
-      return lines;
-    }
-    if (RE_IP_CIDR.test(s)) {
-      lines.push(`IP-CIDR,${s}`);
-      return lines;
-    }
-    if (RE_IP_RANGE.test(s)) {
-      lines.push(`REGEX,^${escapeForRegex(s)}$`);
-      return lines;
-    }
-    if (s.startsWith(".")) {
-      const domain = s.replace(/^\.+/, "");
-      lines.push(`DOMAIN-SUFFIX,${domain}`);
-      return lines;
-    }
-    const s_no_star = s.replace(/^[\*\.]+/, "");
-    if (RE_DOMAIN.test(s_no_star)) {
-      lines.push(`DOMAIN-SUFFIX,${s_no_star}`);
-      return lines;
-    }
-    lines.push(`REGEX,${escapeForRegex(s)}`);
-    return lines;
-  } else if (typeof entry === "object" && entry !== null) {
-    let v = null;
-    const preferKeys = ["payload", "value", "content", "pattern", "domain", "host", "rule"];
-    for (const k of preferKeys) { if (k in entry) { v = entry[k]; break; } }
-    let t = null;
-    for (const k of ["type", "rule_type", "kind"]) { if (k in entry) { t = String(entry[k]).toLowerCase(); break; } }
-    if (v === null) {
-      for (const k of ["domain", "host", "pattern", "rule"]) { if (k in entry) { v = entry[k]; break; } }
-    }
-    if (v === null) {
-      lines.push(`REGEX,${escapeForRegex(JSON.stringify(entry, null, ""))}`);
-      return lines;
-    }
-    if (Array.isArray(v)) {
-      for (const e of v) lines.push(...toLoonLines(e));
-      return lines;
-    }
-    const s = String(v).trim();
-    if (!s) return lines;
-    if (t) {
-      if (t.includes("domain") && (t.includes("suffix") || t === "suffix" || t.includes("domain-suffix"))) {
-        lines.push(`DOMAIN-SUFFIX,${s}`);
-        return lines;
-      }
-      if (t.includes("domain") && (t.includes("keyword") || t.includes("key"))) {
-        lines.push(`DOMAIN-KEYWORD,${s}`);
-        return lines;
-      }
-      if (t.includes("domain")) {
-        lines.push(`DOMAIN-SUFFIX,${s}`);
-        return lines;
-      }
-      if (t.includes("ip") || t.includes("cidr")) {
-        lines.push(`IP-CIDR,${s}`);
-        return lines;
-      }
-      if (t.includes("regex") || t.includes("re")) {
-        lines.push(`REGEX,${s}`);
-        return lines;
-      }
-    }
-    return toLoonLines(s);
-  }
-  return lines;
+function cleanDomainCandidate(raw) {
+  if (!raw || typeof raw !== "string") return null;
+  let s = raw.trim();
+  if (!s) return null;
+  // remove protocol
+  s = s.replace(/^[a-zA-Z]+:\/\//, "");
+  // remove path, query, fragment
+  s = s.split(/[\/\?#]/, 1)[0];
+  // remove port
+  s = s.replace(/:\d+$/, "");
+  // remove leading wildcards or dots
+  s = s.replace(/^\*+\.*/, "").replace(/^\.+/, "");
+  s = s.toLowerCase();
+  // reject obvious invalids
+  if (/[\/\s@]/.test(s)) return null;
+  if (/^\d+$/.test(s)) return null;
+  if (!s.includes(".")) return null;
+  if (!/^[a-z0-9\.\-]+$/.test(s)) return null;
+  s = s.replace(/(^[\.-]+)|([\.-]+$)/g, "");
+  if (!s) return null;
+  return s;
 }
 
 async function fetchJson(url) {
@@ -158,37 +69,96 @@ async function fetchJson(url) {
 async function main() {
   const opt = parseArgs();
   if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`);
-  const jsonObj = await fetchJson(opt.url);
-  if (opt.verbose) console.error("[INFO] flattening and converting...");
-  const flat = flattenJson(jsonObj);
-  if (opt.verbose) console.error(`[INFO] found ${flat.length} raw entries`);
-  const seen = new Set();
-  const out = [];
-  for (const e of flat) {
-    try {
-      const lines = toLoonLines(e);
-      for (const ln of lines) {
-        if (!seen.has(ln)) { seen.add(ln); out.push(ln); }
+  let j;
+  try {
+    j = await fetchJson(opt.url);
+  } catch (err) {
+    console.error("[ERROR] fetch JSON failed:", err.message || err);
+    process.exit(2);
+  }
+
+  if (!j || typeof j !== "object") {
+    console.error("[ERROR] fetched JSON is not an object");
+    process.exit(2);
+  }
+
+  const rules = j.rules;
+  if (!Array.isArray(rules)) {
+    console.error("[ERROR] JSON.rules is not an array or missing");
+    // 为兼容性：写 header-only 并退出 0（或根据需要改为非0）
+    const headerOnly = [
+      "# Converted by scripts/convert_to_loon_no_action.js",
+      `# Source: ${opt.url}`,
+      `# Rules: 0`,
+      "# Format: TYPE,CONTENT (no action column)",
+      ""
+    ].join("\n") + "\n";
+    const outPath0 = path.resolve(process.cwd(), opt.output);
+    fs.mkdirSync(path.dirname(outPath0) || ".", { recursive: true });
+    fs.writeFileSync(outPath0, headerOnly, { encoding: "utf8" });
+    console.error("[INFO] wrote header-only output file because rules is missing or not an array");
+    return;
+  }
+
+  const outSet = new Set();
+  let countDomain = 0, countDomainSuffix = 0, countKeyword = 0;
+
+  for (const ruleObj of rules) {
+    if (!ruleObj || typeof ruleObj !== "object") continue;
+
+    const dom = ruleObj.domain;
+    if (Array.isArray(dom)) {
+      for (const item of dom) {
+        if (typeof item !== "string") continue;
+        const s = cleanDomainCandidate(item);
+        if (!s) continue;
+        outSet.add(`DOMAIN-SUFFIX,${s}`);
+        countDomain++;
       }
-    } catch (err) {
-      if (opt.verbose) console.error("[WARN] skip entry:", err);
+    }
+
+    const domsuf = ruleObj.domain_suffix;
+    if (Array.isArray(domsuf)) {
+      for (const item of domsuf) {
+        if (typeof item !== "string") continue;
+        const s = cleanDomainCandidate(item);
+        if (!s) continue;
+        outSet.add(`DOMAIN-SUFFIX,${s}`);
+        countDomainSuffix++;
+      }
+    }
+
+    const dkeyword = ruleObj.domain_keyword;
+    if (Array.isArray(dkeyword)) {
+      for (const item of dkeyword) {
+        if (typeof item !== "string") continue;
+        const s = cleanDomainCandidate(item);
+        if (!s) continue;
+        outSet.add(`DOMAIN-KEYWORD,${s}`);
+        countKeyword++;
+      }
     }
   }
+
+  const lines = Array.from(outSet).sort((a,b) => a.localeCompare(b));
+  if (opt.verbose) {
+    console.error(`[INFO] extracted raw counts -> domain: ${countDomain}, domain_suffix: ${countDomainSuffix}, domain_keyword: ${countKeyword}`);
+    console.error(`[INFO] unique rules after dedupe: ${lines.length}`);
+  }
+
   const header = [
     "# Converted by scripts/convert_to_loon_no_action.js",
     `# Source: ${opt.url}`,
-    `# Rules: ${out.length}`,
+    `# Rules: ${lines.length}`,
     "# Format: TYPE,CONTENT (no action column)",
     ""
   ];
-  const content = header.concat(out).join("\n") + "\n";
+  const outText = header.concat(lines).join("\n") + "\n";
   const outPath = path.resolve(process.cwd(), opt.output);
   fs.mkdirSync(path.dirname(outPath) || ".", { recursive: true });
-  fs.writeFileSync(outPath, content, { encoding: "utf8" });
-  if (opt.verbose) console.error(`[INFO] wrote ${out.length} rules to ${opt.output}`);
+  fs.writeFileSync(outPath, outText, { encoding: "utf8" });
+
+  if (opt.verbose) console.error(`[INFO] wrote ${lines.length} rules to ${opt.output}`);
 }
 
-// 直接执行主函数（作为 CLI 脚本）
-if (import.meta.url) {
-  main().catch(err => { console.error("[ERROR]", err); process.exit(2); });
-}
+main().catch(err => { console.error("[ERROR]", err); process.exit(2); });
