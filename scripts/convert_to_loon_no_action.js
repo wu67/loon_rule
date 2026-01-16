@@ -112,7 +112,7 @@ async function main() {
         if (typeof item !== "string") continue;
         const s = cleanDomainCandidate(item);
         if (!s) continue;
-        outSet.add(`DOMAIN-SUFFIX,${s}`);
+        outSet.add(`DOMAIN,${s}`);
         countDomain++;
       }
     }
