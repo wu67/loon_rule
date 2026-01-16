@@ -63,7 +63,7 @@ function flattenJson(obj) {
 }
 
 function escapeForRegex(s) {
-  return s.replace(/[.*+?^${}()|[\\]\]/g, "\\$&");
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function toLoonLines(entry) {
@@ -83,7 +83,7 @@ function toLoonLines(entry) {
       let pattern = s;
       if (pattern.startsWith("||")) {
         pattern = pattern.slice(2);
-        // escape then replace escaped \\* -> .*
+        // escape then replace escaped \* -> .*
         pattern = escapeForRegex(pattern).replace(/\\\*/g, ".*").replace(/\\\^/g, "");
         const regex = `.*${pattern}.*`;
         lines.push(`REGEX,${regex}`);
@@ -106,7 +106,7 @@ function toLoonLines(entry) {
       lines.push(`DOMAIN-SUFFIX,${domain}`);
       return lines;
     }
-    const s_no_star = s.replace(/^[@\*\.]+/, "");
+    const s_no_star = s.replace(/^[\*\.]+/, "");
     if (RE_DOMAIN.test(s_no_star)) {
       lines.push(`DOMAIN-SUFFIX,${s_no_star}`);
       return lines;
@@ -214,6 +214,8 @@ async function main() {
   }
 }
 
-if (import.meta.url === `file://${fileURLToPath(process.argv[1])}`) {
+// 修复入口检测：不要把 process.argv[1] 当作 URL 传入 fileURLToPath。
+// 在 ESM 下，比较 fileURLToPath(import.meta.url) 与 process.argv[1] 来判断是否作为主模块运行。
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
   main();
 }
