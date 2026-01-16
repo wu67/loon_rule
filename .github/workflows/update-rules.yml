@@ -1,0 +1,43 @@
+name: Update reject.list from remote rules
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # 每天 07:00 UTC 更新（可修改）
+  workflow_dispatch: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      RULES_URL: https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json
+      OUTPUT_FILE: reject.list
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+
+      - name: Run conversion (generate reject.list)
+        run: |
+          node scripts/convert_to_loon_no_action.js --url "${{ env.RULES_URL }}" --output "${{ env.OUTPUT_FILE }}" --verbose
+
+      - name: Show head of generated file
+        run: |
+          echo "---- head of generated file ----"
+          head -n 20 "${{ env.OUTPUT_FILE }}" || true
+          echo "---- done ----"
+
+      - name: Commit and push if changed
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: "chore: update reject.list from remote rules"
+          add: "${{ env.OUTPUT_FILE }}"
+          author_name: github-actions[bot]
+          author_email: 41898282+github-actions[bot]@users.noreply.github.com
+          committer_name: github-actions[bot]
+          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
