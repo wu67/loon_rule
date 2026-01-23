@@ -168,6 +168,11 @@ async function main() {
     countDomainSuffix = 0,
     countKeyword = 0
 
+  // 使用 Map 分别存储不同类型的规则，便于去重
+  const domainMap = new Map() // 存储 DOMAIN 规则
+  const domainSuffixMap = new Map() // 存储 DOMAIN-SUFFIX 规则
+  const domainKeywordSet = new Set() // DOMAIN-KEYWORD 规则
+
   for (const ruleObj of rules) {
     if (!ruleObj || typeof ruleObj !== 'object') continue
 
@@ -177,7 +182,7 @@ async function main() {
         if (typeof item !== 'string') continue
         const s = cleanDomainCandidate(item)
         if (!s) continue
-        outSet.add(`DOMAIN,${s}`)
+        domainMap.set(s, true)
         countDomain++
       }
     }
@@ -188,7 +193,7 @@ async function main() {
         if (typeof item !== 'string') continue
         const s = cleanDomainCandidate(item)
         if (!s) continue
-        outSet.add(`DOMAIN-SUFFIX,${s}`)
+        domainSuffixMap.set(s, true)
         countDomainSuffix++
       }
     }
@@ -199,10 +204,23 @@ async function main() {
         if (typeof item !== 'string') continue
         const s = cleanDomainCandidate(item)
         if (!s) continue
-        outSet.add(`DOMAIN-KEYWORD,${s}`)
+        domainKeywordSet.add(s)
         countKeyword++
       }
     }
+  }
+
+  // 合并规则：如果同时存在 DOMAIN 和 DOMAIN-SUFFIX，只保留 DOMAIN-SUFFIX
+  for (const domain of domainSuffixMap.keys()) {
+    outSet.add(`DOMAIN-SUFFIX,${domain}`)
+  }
+  for (const domain of domainMap.keys()) {
+    if (!domainSuffixMap.has(domain)) {
+      outSet.add(`DOMAIN,${domain}`)
+    }
+  }
+  for (const keyword of domainKeywordSet) {
+    outSet.add(`DOMAIN-KEYWORD,${keyword}`)
   }
 
   const lines = Array.from(outSet).sort((a, b) => a.localeCompare(b))
