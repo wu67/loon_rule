@@ -39,8 +39,8 @@ jobs:
       - name: Commit and push if changed
         uses: EndBug/add-and-commit@v9
         with:
-          message: "chore: update reject.list from remote rules"
-          add: "${{ env.OUTPUT_FILE }}"
+          message: "chore: update reject.list and ip.list from remote rules"
+          add: "${{ env.OUTPUT_FILE }} ip.list"
           token: "${{ secrets.AUTO_GEN_REJECTLIST}}"
           author_name: github-actions[bot]
           author_email: 41898282+github-actions[bot]@users.noreply.github.com
