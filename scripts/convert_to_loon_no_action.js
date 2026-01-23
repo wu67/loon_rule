@@ -66,8 +66,55 @@ async function fetchJson(url) {
   return res.json();
 }
 
+async function fetchText(url) {
+  const res = await fetch(url, { method: "GET" });
+  if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`);
+  return res.text();
+}
+
+async function fetchAndConvertCIDR() {
+  const url = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt";
+  console.error("[INFO] fetching CIDR rules from", url);
+  
+  const text = await fetchText(url);
+  const lines = text.split("\n").filter(line => line.trim());
+  
+  // 为每一行添加 ,no-resolve
+  const convertedLines = lines.map(line => {
+    const trimmed = line.trim();
+    if (!trimmed) return null;
+    // 如果已经包含 no-resolve，则不重复添加
+    if (trimmed.includes("no-resolve")) return trimmed;
+    return `${trimmed},no-resolve`;
+  }).filter(Boolean);
+  
+  // 写入到 ip.list（项目根目录）
+  const outputPath = path.resolve(process.cwd(), "ip.list");
+  
+  const header = [
+    "# Converted CIDR rules with no-resolve",
+    `# Source: ${url}`,
+    `# Rules: ${convertedLines.length}`,
+    `# Generated: ${new Date().toISOString()}`,
+    ""
+  ];
+  
+  const outputContent = header.concat(convertedLines).join("\n") + "\n";
+  fs.writeFileSync(outputPath, outputContent, { encoding: "utf8" });
+  
+  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.list`);
+}
+
 async function main() {
   const opt = parseArgs();
+  
+  // 自动执行 CIDR 规则转换，失败不影响后续流程
+  try {
+    await fetchAndConvertCIDR();
+  } catch (err) {
+    console.error("[WARN] CIDR conversion failed:", err.message || err);
+  }
+  
   if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`);
   let j;
   try {
