@@ -14,198 +14,221 @@
  *
  * 要求: Node >= 18（使用全局 fetch）
  */
-import fs from "fs";
-import path from "path";
-import process from "process";
+import fs from 'fs'
+import path from 'path'
+import process from 'process'
 
-const DEFAULT_URL = "https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json";
-const DEFAULT_OUTPUT = "reject.list";
+const DEFAULT_URL =
+  'https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json'
+const DEFAULT_OUTPUT = 'reject.list'
 
 function parseArgs() {
-  const args = process.argv.slice(2);
-  const opt = { url: DEFAULT_URL, output: DEFAULT_OUTPUT, verbose: false };
+  const args = process.argv.slice(2)
+  const opt = { url: DEFAULT_URL, output: DEFAULT_OUTPUT, verbose: false }
   for (let i = 0; i < args.length; i++) {
-    const a = args[i];
-    if (a === "--url" || a === "-u") { opt.url = args[++i]; continue; }
-    if (a === "--output" || a === "-o") { opt.output = args[++i]; continue; }
-    if (a === "--verbose" || a === "-v") { opt.verbose = true; continue; }
-    if (a === "--help" || a === "-h") {
-      console.log("Usage: node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE>");
-      process.exit(0);
+    const a = args[i]
+    if (a === '--url' || a === '-u') {
+      opt.url = args[++i]
+      continue
+    }
+    if (a === '--output' || a === '-o') {
+      opt.output = args[++i]
+      continue
+    }
+    if (a === '--verbose' || a === '-v') {
+      opt.verbose = true
+      continue
+    }
+    if (a === '--help' || a === '-h') {
+      console.log(
+        'Usage: node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE>',
+      )
+      process.exit(0)
     }
   }
-  return opt;
+  return opt
 }
 
 function cleanDomainCandidate(raw) {
-  if (!raw || typeof raw !== "string") return null;
-  let s = raw.trim();
-  if (!s) return null;
+  if (!raw || typeof raw !== 'string') return null
+  let s = raw.trim()
+  if (!s) return null
   // remove protocol
-  s = s.replace(/^[a-zA-Z]+:\/\//, "");
+  s = s.replace(/^[a-zA-Z]+:\/\//, '')
   // remove path, query, fragment
-  s = s.split(/[\/\?#]/, 1)[0];
+  s = s.split(/[\/\?#]/, 1)[0]
   // remove port
-  s = s.replace(/:\d+$/, "");
+  s = s.replace(/:\d+$/, '')
   // remove leading wildcards or dots
-  s = s.replace(/^\*+\.*/, "").replace(/^\.+/, "");
-  s = s.toLowerCase();
+  s = s.replace(/^\*+\.*/, '').replace(/^\.+/, '')
+  s = s.toLowerCase()
   // reject obvious invalids
-  if (/[\/\s@]/.test(s)) return null;
-  if (/^\d+$/.test(s)) return null;
-  if (!s.includes(".")) return null;
-  if (!/^[a-z0-9\.\-]+$/.test(s)) return null;
-  s = s.replace(/(^[\.-]+)|([\.-]+$)/g, "");
-  if (!s) return null;
-  return s;
+  if (/[\/\s@]/.test(s)) return null
+  if (/^\d+$/.test(s)) return null
+  if (!s.includes('.')) return null
+  if (!/^[a-z0-9\.\-]+$/.test(s)) return null
+  s = s.replace(/(^[\.-]+)|([\.-]+$)/g, '')
+  if (!s) return null
+  return s
 }
 
 async function fetchJson(url) {
-  const res = await fetch(url, { method: "GET" });
-  if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`);
-  return res.json();
+  const res = await fetch(url, { method: 'GET' })
+  if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`)
+  return res.json()
 }
 
 async function fetchText(url) {
-  const res = await fetch(url, { method: "GET" });
-  if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`);
-  return res.text();
+  const res = await fetch(url, { method: 'GET' })
+  if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`)
+  return res.text()
 }
 
 async function fetchAndConvertCIDR() {
-  const url = "https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt";
-  console.error("[INFO] fetching CIDR rules from", url);
-  
-  const text = await fetchText(url);
-  const lines = text.split("\n").filter(line => line.trim());
-  
+  const url =
+    'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt'
+  console.error('[INFO] fetching CIDR rules from', url)
+
+  const text = await fetchText(url)
+  const lines = text.split('\n').filter((line) => line.trim())
+
   // 为每一行添加 ,no-resolve
-  const convertedLines = lines.map(line => {
-    const trimmed = line.trim();
-    if (!trimmed) return null;
-    // 如果已经包含 no-resolve，则不重复添加
-    if (trimmed.includes("no-resolve")) return trimmed;
-    return `${trimmed},no-resolve`;
-  }).filter(Boolean);
-  
+  const convertedLines = lines
+    .map((line) => {
+      const trimmed = line.trim()
+      if (!trimmed) return null
+      // 如果已经包含 no-resolve，则不重复添加
+      if (trimmed.includes('no-resolve')) return trimmed
+      return `${trimmed},no-resolve`
+    })
+    .filter(Boolean)
+
   // 写入到 ip.list（项目根目录）
-  const outputPath = path.resolve(process.cwd(), "ip.list");
-  
+  const outputPath = path.resolve(process.cwd(), 'ip.list')
+
   const header = [
-    "# Converted CIDR rules with no-resolve",
+    '# Converted CIDR rules with no-resolve',
     `# Source: ${url}`,
     `# Rules: ${convertedLines.length}`,
     `# Generated: ${new Date().toISOString()}`,
-    ""
-  ];
-  
-  const outputContent = header.concat(convertedLines).join("\n") + "\n";
-  fs.writeFileSync(outputPath, outputContent, { encoding: "utf8" });
-  
-  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.list`);
+    '',
+  ]
+
+  const outputContent = header.concat(convertedLines).join('\n') + '\n'
+  fs.writeFileSync(outputPath, outputContent, { encoding: 'utf8' })
+
+  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.list`)
 }
 
 async function main() {
-  const opt = parseArgs();
-  
+  const opt = parseArgs()
+
   // 自动执行 CIDR 规则转换，失败不影响后续流程
   try {
-    await fetchAndConvertCIDR();
+    await fetchAndConvertCIDR()
   } catch (err) {
-    console.error("[WARN] CIDR conversion failed:", err.message || err);
+    console.error('[WARN] CIDR conversion failed:', err.message || err)
   }
-  
-  if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`);
-  let j;
+
+  if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`)
+  let j
   try {
-    j = await fetchJson(opt.url);
+    j = await fetchJson(opt.url)
   } catch (err) {
-    console.error("[ERROR] fetch JSON failed:", err.message || err);
-    process.exit(2);
+    console.error('[ERROR] fetch JSON failed:', err.message || err)
+    process.exit(2)
   }
 
-  if (!j || typeof j !== "object") {
-    console.error("[ERROR] fetched JSON is not an object");
-    process.exit(2);
+  if (!j || typeof j !== 'object') {
+    console.error('[ERROR] fetched JSON is not an object')
+    process.exit(2)
   }
 
-  const rules = j.rules;
+  const rules = j.rules
   if (!Array.isArray(rules)) {
-    console.error("[ERROR] JSON.rules is not an array or missing");
+    console.error('[ERROR] JSON.rules is not an array or missing')
     // 为兼容性：写 header-only 并退出 0（或根据需要改为非0）
-    const headerOnly = [
-      "# Converted by scripts/convert_to_loon_no_action.js",
-      `# Source: ${opt.url}`,
-      `# Rules: 0`,
-      "# Format: TYPE,CONTENT (no action column)",
-      ""
-    ].join("\n") + "\n";
-    const outPath0 = path.resolve(process.cwd(), opt.output);
-    fs.mkdirSync(path.dirname(outPath0) || ".", { recursive: true });
-    fs.writeFileSync(outPath0, headerOnly, { encoding: "utf8" });
-    console.error("[INFO] wrote header-only output file because rules is missing or not an array");
-    return;
+    const headerOnly =
+      [
+        '# Converted by scripts/convert_to_loon_no_action.js',
+        `# Source: ${opt.url}`,
+        `# Rules: 0`,
+        '# Format: TYPE,CONTENT (no action column)',
+        '',
+      ].join('\n') + '\n'
+    const outPath0 = path.resolve(process.cwd(), opt.output)
+    fs.mkdirSync(path.dirname(outPath0) || '.', { recursive: true })
+    fs.writeFileSync(outPath0, headerOnly, { encoding: 'utf8' })
+    console.error('[INFO] wrote header-only output file because rules is missing or not an array')
+    return
   }
 
-  const outSet = new Set();
-  let countDomain = 0, countDomainSuffix = 0, countKeyword = 0;
+  const outSet = new Set()
+  let countDomain = 0,
+    countDomainSuffix = 0,
+    countKeyword = 0
 
   for (const ruleObj of rules) {
-    if (!ruleObj || typeof ruleObj !== "object") continue;
+    if (!ruleObj || typeof ruleObj !== 'object') continue
 
-    const dom = ruleObj.domain;
+    const dom = ruleObj.domain
     if (Array.isArray(dom)) {
       for (const item of dom) {
-        if (typeof item !== "string") continue;
-        const s = cleanDomainCandidate(item);
-        if (!s) continue;
-        outSet.add(`DOMAIN,${s}`);
-        countDomain++;
+        if (typeof item !== 'string') continue
+        const s = cleanDomainCandidate(item)
+        if (!s) continue
+        outSet.add(`DOMAIN,${s}`)
+        countDomain++
       }
     }
 
-    const domsuf = ruleObj.domain_suffix;
+    const domsuf = ruleObj.domain_suffix
     if (Array.isArray(domsuf)) {
       for (const item of domsuf) {
-        if (typeof item !== "string") continue;
-        const s = cleanDomainCandidate(item);
-        if (!s) continue;
-        outSet.add(`DOMAIN-SUFFIX,${s}`);
-        countDomainSuffix++;
+        if (typeof item !== 'string') continue
+        const s = cleanDomainCandidate(item)
+        if (!s) continue
+        outSet.add(`DOMAIN-SUFFIX,${s}`)
+        countDomainSuffix++
       }
     }
 
-    const dkeyword = ruleObj.domain_keyword;
+    const dkeyword = ruleObj.domain_keyword
     if (Array.isArray(dkeyword)) {
       for (const item of dkeyword) {
-        if (typeof item !== "string") continue;
-        const s = cleanDomainCandidate(item);
-        if (!s) continue;
-        outSet.add(`DOMAIN-KEYWORD,${s}`);
-        countKeyword++;
+        if (typeof item !== 'string') continue
+        const s = cleanDomainCandidate(item)
+        if (!s) continue
+        outSet.add(`DOMAIN-KEYWORD,${s}`)
+        countKeyword++
       }
     }
   }
 
-  const lines = Array.from(outSet).sort((a,b) => a.localeCompare(b));
+  const lines = Array.from(outSet).sort((a, b) => a.localeCompare(b))
   if (opt.verbose) {
-    console.error(`[INFO] extracted raw counts -> domain: ${countDomain}, domain_suffix: ${countDomainSuffix}, domain_keyword: ${countKeyword}`);
-    console.error(`[INFO] unique rules after dedupe: ${lines.length}`);
+    console.error(
+      `[INFO] extracted raw counts -> domain: ${countDomain}, domain_suffix: ${countDomainSuffix}, domain_keyword: ${countKeyword}`,
+    )
+    console.error(`[INFO] unique rules after dedupe: ${lines.length}`)
   }
 
   const header = [
-    "# Converted by scripts/convert_to_loon_no_action.js",
+    '# Converted by scripts/convert_to_loon_no_action.js',
     `# Source: ${opt.url}`,
     `# Rules: ${lines.length}`,
-    "# Format: TYPE,CONTENT (no action column)",
-    ""
-  ];
-  const outText = header.concat(lines).join("\n") + "\n";
-  const outPath = path.resolve(process.cwd(), opt.output);
-  fs.mkdirSync(path.dirname(outPath) || ".", { recursive: true });
-  fs.writeFileSync(outPath, outText, { encoding: "utf8" });
+    '# Format: TYPE,CONTENT (no action column)',
+    '',
+  ]
+  const outText = header.concat(lines).join('\n') + '\n'
+  const outPath = path.resolve(process.cwd(), opt.output)
+  fs.mkdirSync(path.dirname(outPath) || '.', { recursive: true })
+  fs.writeFileSync(outPath, outText, { encoding: 'utf8' })
 
-  if (opt.verbose) console.error(`[INFO] wrote ${lines.length} rules to ${opt.output}`);
+  if (opt.verbose) console.error(`[INFO] wrote ${lines.length} rules to ${opt.output}`)
 }
 
-main().catch(err => { console.error("[ERROR]", err); process.exit(2); });
+main().catch((err) => {
+  console.error('[ERROR]', err)
+  process.exit(2)
+})
