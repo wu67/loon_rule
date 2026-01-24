@@ -2,7 +2,7 @@ name: Update reject.txt from remote rules
 
 on:
   schedule:
-    - cron: '0 7 * * *'  # 每天 07:00 UTC 更新（可修改）
+    - cron: '0 3 * * *'  # 每天 03:00 UTC 更新（可修改）
   workflow_dispatch: {}
 
 # 关键：明确声明写权限
