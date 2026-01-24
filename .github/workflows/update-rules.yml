@@ -1,4 +1,4 @@
-name: Update reject.list from remote rules
+name: Update reject.txt from remote rules
 
 on:
   schedule:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RULES_URL: https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json
-      OUTPUT_FILE: reject.list
+      OUTPUT_FILE: reject.txt
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '24.11.1'
 
-      - name: Run conversion (generate reject.list)
+      - name: Run conversion (generate reject.txt)
         run: |
           node scripts/convert_to_loon_no_action.js --url "${{ env.RULES_URL }}" --output "${{ env.OUTPUT_FILE }}" --verbose
 
@@ -39,8 +39,8 @@ jobs:
       - name: Commit and push if changed
         uses: EndBug/add-and-commit@v9
         with:
-          message: "chore: update reject.list and ip.list from remote rules"
-          add: "${{ env.OUTPUT_FILE }} ip.list"
+          message: "chore: update reject.txt and ip.txt from remote rules"
+          add: "${{ env.OUTPUT_FILE }} ip.txt"
           token: "${{ secrets.AUTO_GEN_REJECTLIST}}"
           author_name: github-actions[bot]
           author_email: 41898282+github-actions[bot]@users.noreply.github.com

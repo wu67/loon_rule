@@ -7,7 +7,7 @@
  *   - domain_suffix
  *   - domain_keyword
  *
- * 并把它们转换为 Loon 格式的规则（TYPE,CONTENT）写入输出文件（默认 reject.list）。
+ * 并把它们转换为 Loon 格式的规则（TYPE,CONTENT）写入输出文件（默认 reject.txt）。
  *
  * 用法:
  *   node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE> [--verbose]
@@ -20,7 +20,7 @@ import process from 'process'
 
 const DEFAULT_URL =
   'https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json'
-const DEFAULT_OUTPUT = 'reject.list'
+const DEFAULT_OUTPUT = 'reject.txt'
 
 function parseArgs() {
   const args = process.argv.slice(2)
@@ -103,8 +103,8 @@ async function fetchAndConvertCIDR() {
     })
     .filter(Boolean)
 
-  // 写入到 ip.list（项目根目录）
-  const outputPath = path.resolve(process.cwd(), 'ip.list')
+  // 写入到 ip.txt（项目根目录）
+  const outputPath = path.resolve(process.cwd(), 'ip.txt')
 
   const header = [
     '# Converted CIDR rules with no-resolve',
@@ -117,7 +117,7 @@ async function fetchAndConvertCIDR() {
   const outputContent = header.concat(convertedLines).join('\n') + '\n'
   fs.writeFileSync(outputPath, outputContent, { encoding: 'utf8' })
 
-  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.list`)
+  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.txt`)
 }
 
 async function main() {
