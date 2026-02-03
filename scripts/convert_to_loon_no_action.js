@@ -120,6 +120,40 @@ async function fetchAndConvertCIDR() {
   console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.txt`)
 }
 
+async function fetchAndConvertPCDN() {
+  const url =
+    'https://github.com/Yuu518/sing-box-rules/raw/refs/heads/rule_set/rule_set_site/pcdn-cn.json'
+  console.error('[INFO] fetching PCDN rules from', url)
+
+  const json = await fetchJson(url)
+  if (!json || typeof json !== 'object') {
+    throw new Error('Invalid JSON response')
+  }
+
+  const rules = json.rules
+  if (!Array.isArray(rules) || rules.length === 0) {
+    throw new Error('rules is not an array or empty')
+  }
+
+  const domainSuffixes = rules[0].domain_suffix
+  if (!Array.isArray(domainSuffixes)) {
+    throw new Error('rules[0].domain_suffix is not an array')
+  }
+
+  const pcdnRules = []
+  for (const suffix of domainSuffixes) {
+    if (typeof suffix === 'string') {
+      const cleaned = cleanDomainCandidate(suffix)
+      if (cleaned) {
+        pcdnRules.push(`DOMAIN-SUFFIX,${cleaned}`)
+      }
+    }
+  }
+
+  console.error(`[INFO] extracted ${pcdnRules.length} PCDN rules`)
+  return pcdnRules
+}
+
 async function main() {
   const opt = parseArgs()
 
@@ -229,6 +263,17 @@ async function main() {
       `[INFO] extracted raw counts -> domain: ${countDomain}, domain_suffix: ${countDomainSuffix}, domain_keyword: ${countKeyword}`,
     )
     console.error(`[INFO] unique rules after dedupe: ${lines.length}`)
+  }
+
+  // 获取并追加 PCDN 规则
+  try {
+    const pcdnRules = await fetchAndConvertPCDN()
+    lines.push(...pcdnRules)
+    if (opt.verbose) {
+      console.error(`[INFO] appended ${pcdnRules.length} PCDN rules`)
+    }
+  } catch (err) {
+    console.error('[WARN] PCDN rules fetch failed:', err.message || err)
   }
 
   const header = [
