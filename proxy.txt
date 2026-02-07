@@ -18,3 +18,7 @@ DOMAIN-SUFFIX,php.net
 DOMAIN-SUFFIX,wnacg.com
 DOMAIN-SUFFIX,xn--ngstr-lra8j.com
 DOMAIN-SUFFIX,miobt.com
+DOMAIN-SUFFIX,xiaohongshu.com
+DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-KEYWORD,xhscdn
+
