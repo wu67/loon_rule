@@ -8,6 +8,10 @@ DOMAIN-KEYWORD,openai
 DOMAIN-KEYWORD,debian
 DOMAIN-KEYWORD,amazon
 DOMAIN-KEYWORD,zoho
+DOMAIN-KEYWORD,kurogame
+DOMAIN-KEYWORD,wutheringwaves
+DOMAIN-SUFFIX,aki-game.com
+DOMAIN-SUFFIX,aki-game2.com
 DOMAIN-SUFFIX,kelee.one
 DOMAIN-SUFFIX,jsdelivr.net
 DOMAIN-SUFFIX,bing.com
