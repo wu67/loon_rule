@@ -265,12 +265,24 @@ async function main() {
     console.error(`[INFO] unique rules after dedupe: ${lines.length}`)
   }
 
-  // 获取并追加 PCDN 规则
+  // 获取并写入 PCDN 规则到 pcdn.txt
   try {
     const pcdnRules = await fetchAndConvertPCDN()
-    lines.push(...pcdnRules)
+
+    // 写入 pcdn.txt
+    const pcdnHeader = [
+      '# Converted PCDN rules',
+      `# Source: PCDN-CN`,
+      `# Rules: ${pcdnRules.length}`,
+      `# Generated: ${new Date().toISOString()}`,
+      '',
+    ]
+    const pcdnText = pcdnHeader.concat(pcdnRules).join('\n') + '\n'
+    const pcdnPath = path.resolve(process.cwd(), 'pcdn.txt')
+    fs.writeFileSync(pcdnPath, pcdnText, { encoding: 'utf8' })
+
     if (opt.verbose) {
-      console.error(`[INFO] appended ${pcdnRules.length} PCDN rules`)
+      console.error(`[INFO] wrote ${pcdnRules.length} PCDN rules to pcdn.txt`)
     }
   } catch (err) {
     console.error('[WARN] PCDN rules fetch failed:', err.message || err)
