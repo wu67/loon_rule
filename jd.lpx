@@ -1,0 +1,9 @@
+#!name = 京东去开屏广告
+#!desc = 京东去开屏广告-测试
+#!system = iOS,iPadOS
+
+[Rewrite]
+^https?:\/\/api\.m\.jd\.com\/client\.action\?functionId=start reject-200
+
+[MITM]
+api.m.jd.com
