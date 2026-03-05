@@ -1,7 +1,7 @@
 DOMAIN-SUFFIX,gs-loc.apple.com
 DOMAIN-SUFFIX,configuration.apple.com
 DOMAIN-SUFFIX,api.apple-cloudkit.com
-DOMAIN-SUFFIX,cl3.apple.com
-DOMAIN-SUFFIX,cl5.apple.com
 DOMAIN-SUFFIX,captive.apple.com
 DOMAIN-SUFFIX,time.apple.com
+DOMAIN-SUFFIX,time-ios.apple.com
+DOMAIN-SUFFIX,time-macos.apple.com
