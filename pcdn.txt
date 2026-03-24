@@ -1,7 +1,7 @@
 # Converted PCDN rules
 # Source: PCDN-CN
-# Rules: 30
-# Generated: 2026-03-23T03:57:24.168Z
+# Rules: 31
+# Generated: 2026-03-24T03:51:33.014Z
 
 DOMAIN-SUFFIX,bsccdn.net
 DOMAIN-SUFFIX,xycdn.com
@@ -21,8 +21,8 @@ DOMAIN-SUFFIX,p2p.huya.com
 DOMAIN-SUFFIX,p2plive-ws.douyucdn.cn
 DOMAIN-SUFFIX,p2plog.douyucdn.cn
 DOMAIN-SUFFIX,p2ptun.qq.com
+DOMAIN-SUFFIX,edge.mountaintoys.cn
 DOMAIN-SUFFIX,dyp2p-ali.douyucdn.cn
-DOMAIN-SUFFIX,dyp2p-hw.douyucdn.cn
 DOMAIN-SUFFIX,p2pvod-ws.douyucdn.cn
 DOMAIN-SUFFIX,pcdn.yximgs.com
 DOMAIN-SUFFIX,p2p-ali.douyucdn.cn
@@ -31,5 +31,6 @@ DOMAIN-SUFFIX,p2p.qq.com
 DOMAIN-SUFFIX,stun.hitv.com
 DOMAIN-SUFFIX,stun1.douyucdn.cn
 DOMAIN-SUFFIX,mcdn.bilivideo.com
+DOMAIN-SUFFIX,dyp2p-hw.douyucdn.cn
 DOMAIN-SUFFIX,p2pupgrade.gamedl.qq.com
 DOMAIN-SUFFIX,p2pupdate.gamedl.qq.com
