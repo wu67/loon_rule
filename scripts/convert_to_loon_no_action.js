@@ -48,7 +48,9 @@ function parseArgs() {
   }
   return opt
 }
-
+let whiteList = [
+  'kurogame.xyz', // 库洛游戏(鸣潮)
+] // 规避上游未知原因意外引入的规则, 导致部分服务无法正常使用
 function cleanDomainCandidate(raw) {
   if (!raw || typeof raw !== 'string') return null
   let s = raw.trim()
@@ -69,6 +71,7 @@ function cleanDomainCandidate(raw) {
   if (!/^[a-z0-9\.\-]+$/.test(s)) return null
   s = s.replace(/(^[\.-]+)|([\.-]+$)/g, '')
   if (!s) return null
+  if (whiteList.some((w) => s === w || s.includes(w))) return null
   return s
 }
 
