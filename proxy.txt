@@ -1,5 +1,10 @@
+DOMAIN-SUFFIX,apple-mapkit.com
+DOMAIN-SUFFIX,aaplimg.com
+DOMAIN-SUFFIX,akadns.net
+DOMAIN-SUFFIX,apple.com
 DOMAIN-KEYWORD,apple
 DOMAIN-KEYWORD,mzstatic
+DOMAIN-SUFFIX,me.com
 DOMAIN-KEYWORD,icloud
 DOMAIN-KEYWORD,npmjs
 DOMAIN-KEYWORD,google
