@@ -1,7 +1,7 @@
 # Converted PCDN rules
 # Source: PCDN-CN
 # Rules: 31
-# Generated: 2026-04-14T04:05:11.469Z
+# Generated: 2026-04-15T04:04:49.302Z
 
 DOMAIN-SUFFIX,bsccdn.net
 DOMAIN-SUFFIX,xycdn.com
