@@ -33,4 +33,16 @@ DOMAIN-SUFFIX,miobt.com
 DOMAIN-SUFFIX,xiaohongshu.com
 DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-KEYWORD,xhscdn
+# tg
+DOMAIN-SUFFIX,t.me
+DOMAIN-SUFFIX,tg.dev
+DOMAIN-SUFFIX,telesco.pe
+DOMAIN-SUFFIX,telegra.ph
+DOMAIN-SUFFIX,telegram.dog
+DOMAIN-SUFFIX,tdesktop.com
+DOMAIN-SUFFIX,comments.app
+DOMAIN-SUFFIX,graph.org
+DOMAIN-KEYWORD,telegram
+# tg end
+
 
