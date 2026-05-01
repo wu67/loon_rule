@@ -44,5 +44,4 @@ DOMAIN-SUFFIX,comments.app
 DOMAIN-SUFFIX,graph.org
 DOMAIN-KEYWORD,telegram
 # tg end
-
-
+DOMAIN-SUFFIX,v2ex.com
