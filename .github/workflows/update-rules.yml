@@ -31,7 +31,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         with:
           message: "chore: update from remote rules"
-          add: "reject.txt ip.txt pcdn.txt"
+          add: "reject.txt ip.txt pcdn.txt proxy_ip.txt"
           token: "${{ secrets.AUTO_GEN_REJECTLIST}}"
           author_name: github-actions[bot]
           author_email: 41898282+github-actions[bot]@users.noreply.github.com

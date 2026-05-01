@@ -156,7 +156,38 @@ async function fetchAndConvertPCDN() {
   console.error(`[INFO] extracted ${pcdnRules.length} PCDN rules`)
   return pcdnRules
 }
+let fetchAndConvertCIDROfTG = async () => {
+  const url = 'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/telegramcidr.txt'
+  console.error('[INFO] fetching TG CIDR rules from', url)
+  const text = await fetchText(url)
+  const lines = text.split('\n').filter((line) => line.trim())
 
+  // 为每一行添加 ,no-resolve
+  const convertedLines = lines
+    .map((line) => {
+      const trimmed = line.trim()
+      if (!trimmed) return null
+      // 如果已经包含 no-resolve，则不重复添加
+      if (trimmed.includes('no-resolve')) return trimmed
+      return `${trimmed},no-resolve`
+    })
+    .filter(Boolean)
+
+  // 写入到txt（项目根目录）
+  const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
+
+  const header = [
+    '# Converted CIDR rules with no-resolve',
+    `# Source: ${url}`,
+    `# Rules: ${convertedLines.length}`,
+    `# Generated: ${new Date().toISOString()}`,
+    '',
+  ]
+
+  fs.mkdirSync(path.dirname(outputPath) || '.', { recursive: true })
+  const outputContent = header.concat(convertedLines).join('\n') + '\n'
+  fs.writeFileSync(outputPath, outputContent, { encoding: 'utf8' })
+}
 async function main() {
   const opt = parseArgs()
 
@@ -165,6 +196,11 @@ async function main() {
     await fetchAndConvertCIDR()
   } catch (err) {
     console.error('[WARN] CIDR conversion failed:', err.message || err)
+  }
+  try {
+    await fetchAndConvertCIDROfTG()
+  } catch (err) {
+    console.error('[WARN] TG CIDR conversion failed:', err.message || err)
   }
 
   if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`)
