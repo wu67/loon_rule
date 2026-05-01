@@ -1,7 +1,7 @@
 # Converted CIDR rules with no-resolve
 # Source: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt
-# Rules: 8628
-# Generated: 2026-04-30T06:07:30.278Z
+# Rules: 8617
+# Generated: 2026-05-01T06:17:37.928Z
 
 IP-CIDR,1.0.1.0/24,no-resolve
 IP-CIDR,1.0.2.0/23,no-resolve
@@ -71,20 +71,7 @@ IP-CIDR,5.154.156.38/31,no-resolve
 IP-CIDR,5.154.156.42/31,no-resolve
 IP-CIDR,5.154.156.50/31,no-resolve
 IP-CIDR,5.154.156.54/31,no-resolve
-IP-CIDR,8.128.0.0/12,no-resolve
-IP-CIDR,8.144.0.0/14,no-resolve
-IP-CIDR,8.148.0.0/19,no-resolve
-IP-CIDR,8.148.32.0/21,no-resolve
-IP-CIDR,8.148.41.0/24,no-resolve
-IP-CIDR,8.148.42.0/23,no-resolve
-IP-CIDR,8.148.44.0/22,no-resolve
-IP-CIDR,8.148.48.0/20,no-resolve
-IP-CIDR,8.148.64.0/18,no-resolve
-IP-CIDR,8.148.128.0/17,no-resolve
-IP-CIDR,8.149.0.0/16,no-resolve
-IP-CIDR,8.150.0.0/15,no-resolve
-IP-CIDR,8.152.0.0/13,no-resolve
-IP-CIDR,8.160.0.0/11,no-resolve
+IP-CIDR,8.128.0.0/10,no-resolve
 IP-CIDR,13.104.184.80/28,no-resolve
 IP-CIDR,14.0.0.0/21,no-resolve
 IP-CIDR,14.0.12.0/22,no-resolve
@@ -4942,6 +4929,7 @@ IP-CIDR,144.123.0.0/16,no-resolve
 IP-CIDR,144.178.30.48/28,no-resolve
 IP-CIDR,144.225.186.0/24,no-resolve
 IP-CIDR,144.255.0.0/16,no-resolve
+IP-CIDR,145.6.0.0/16,no-resolve
 IP-CIDR,145.14.71.0/24,no-resolve
 IP-CIDR,145.14.72.0/22,no-resolve
 IP-CIDR,145.14.81.0/24,no-resolve
@@ -6860,6 +6848,7 @@ IP-CIDR,203.217.164.0/22,no-resolve
 IP-CIDR,203.223.21.0/24,no-resolve
 IP-CIDR,204.55.160.0/24,no-resolve
 IP-CIDR,204.79.135.24/32,no-resolve
+IP-CIDR,206.109.75.0/24,no-resolve
 IP-CIDR,210.2.0.0/23,no-resolve
 IP-CIDR,210.2.2.0/24,no-resolve
 IP-CIDR,210.2.4.0/22,no-resolve
@@ -8540,7 +8529,6 @@ IP-CIDR6,2a0f:1cc5:603::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:645::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:661::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:662::/48,no-resolve
-IP-CIDR6,2a0f:1cc5:690::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:6a0::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:f00::/46,no-resolve
 IP-CIDR6,2a0f:1cc5:f04::/47,no-resolve
@@ -8561,6 +8549,7 @@ IP-CIDR6,2a0f:1cc5:2d03::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:3200::/46,no-resolve
 IP-CIDR6,2a0f:1cc5:3204::/47,no-resolve
 IP-CIDR6,2a0f:1cc5:3206::/48,no-resolve
+IP-CIDR6,2a0f:1cc5:3222::/48,no-resolve
 IP-CIDR6,2a0f:1cc6:b110::/47,no-resolve
 IP-CIDR6,2a0f:2706::/32,no-resolve
 IP-CIDR6,2a0f:6284:4c00::/44,no-resolve
@@ -8614,7 +8603,7 @@ IP-CIDR6,2a14:7583:f70c::/48,no-resolve
 IP-CIDR6,2a14:7583:f743::/48,no-resolve
 IP-CIDR6,2a14:7583:f744::/48,no-resolve
 IP-CIDR6,2a14:7583:f764::/48,no-resolve
-IP-CIDR6,2a14:7586:6100::/48,no-resolve
+IP-CIDR6,2a14:7586:6100::/47,no-resolve
 IP-CIDR6,2a14:7586:6103::/48,no-resolve
 IP-CIDR6,2a14:7586:6104::/48,no-resolve
 IP-CIDR6,2a14:7586:6107::/48,no-resolve
