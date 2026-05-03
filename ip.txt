@@ -1,7 +1,7 @@
 # Converted CIDR rules with no-resolve
 # Source: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt
-# Rules: 8617
-# Generated: 2026-05-02T05:39:59.315Z
+# Rules: 8618
+# Generated: 2026-05-03T06:07:08.123Z
 
 IP-CIDR,1.0.1.0/24,no-resolve
 IP-CIDR,1.0.2.0/23,no-resolve
@@ -4929,7 +4929,6 @@ IP-CIDR,144.123.0.0/16,no-resolve
 IP-CIDR,144.178.30.48/28,no-resolve
 IP-CIDR,144.225.186.0/24,no-resolve
 IP-CIDR,144.255.0.0/16,no-resolve
-IP-CIDR,145.6.0.0/16,no-resolve
 IP-CIDR,145.14.71.0/24,no-resolve
 IP-CIDR,145.14.72.0/22,no-resolve
 IP-CIDR,145.14.81.0/24,no-resolve
@@ -7270,6 +7269,7 @@ IP-CIDR6,2400:9380:9280::/47,no-resolve
 IP-CIDR6,2400:9380:92b1::/48,no-resolve
 IP-CIDR6,2400:9380:92b2::/47,no-resolve
 IP-CIDR6,2400:9380:92b4::/46,no-resolve
+IP-CIDR6,2400:9580::/48,no-resolve
 IP-CIDR6,2400:95e0::/48,no-resolve
 IP-CIDR6,2400:9600:8800::/48,no-resolve
 IP-CIDR6,2400:9620::/32,no-resolve
@@ -8207,6 +8207,7 @@ IP-CIDR6,2408:8872::/32,no-resolve
 IP-CIDR6,2408:8878::/31,no-resolve
 IP-CIDR6,2408:887e::/32,no-resolve
 IP-CIDR6,2408:8906:20::/44,no-resolve
+IP-CIDR6,2408:8906:40::/43,no-resolve
 IP-CIDR6,2408:8907:9000::/44,no-resolve
 IP-CIDR6,2408:890c::/31,no-resolve
 IP-CIDR6,2408:8912::/31,no-resolve
@@ -8526,6 +8527,7 @@ IP-CIDR6,2a0f:1cc5:130::/44,no-resolve
 IP-CIDR6,2a0f:1cc5:140::/43,no-resolve
 IP-CIDR6,2a0f:1cc5:600::/47,no-resolve
 IP-CIDR6,2a0f:1cc5:603::/48,no-resolve
+IP-CIDR6,2a0f:1cc5:642::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:645::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:661::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:662::/48,no-resolve
@@ -8546,9 +8548,8 @@ IP-CIDR6,2a0f:1cc5:2520::/44,no-resolve
 IP-CIDR6,2a0f:1cc5:2600::/40,no-resolve
 IP-CIDR6,2a0f:1cc5:2d01::/48,no-resolve
 IP-CIDR6,2a0f:1cc5:2d03::/48,no-resolve
-IP-CIDR6,2a0f:1cc5:3200::/46,no-resolve
-IP-CIDR6,2a0f:1cc5:3204::/47,no-resolve
-IP-CIDR6,2a0f:1cc5:3206::/48,no-resolve
+IP-CIDR6,2a0f:1cc5:3200::/45,no-resolve
+IP-CIDR6,2a0f:1cc5:3208::/47,no-resolve
 IP-CIDR6,2a0f:1cc5:3222::/48,no-resolve
 IP-CIDR6,2a0f:1cc6:b110::/47,no-resolve
 IP-CIDR6,2a0f:2706::/32,no-resolve
