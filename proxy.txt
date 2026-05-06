@@ -1,6 +1,8 @@
 DOMAIN-SUFFIX,apple-mapkit.com
 DOMAIN-SUFFIX,aaplimg.com
 DOMAIN-SUFFIX,akadns.net
+# loon 如果不加这个详细规则貌似不会匹配中后面的两个规则.
+DOMAIN-SUFFIX,push.apple.com
 DOMAIN-SUFFIX,apple.com
 DOMAIN-KEYWORD,apple
 DOMAIN-KEYWORD,mzstatic
