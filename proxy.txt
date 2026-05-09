@@ -45,3 +45,4 @@ DOMAIN-SUFFIX,graph.org
 DOMAIN-KEYWORD,telegram
 # tg end
 DOMAIN-SUFFIX,v2ex.com
+DOMAIN-SUFFIX,6vw.cc,PROXY
