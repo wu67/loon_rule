@@ -1,7 +1,7 @@
 # Converted CIDR rules with no-resolve
 # Source: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/telegramcidr.txt
 # Rules: 12
-# Generated: 2026-05-18T06:58:30.223Z
+# Generated: 2026-05-19T06:50:29.114Z
 
 IP-CIDR,91.105.192.0/23,no-resolve
 IP-CIDR,91.108.4.0/22,no-resolve
