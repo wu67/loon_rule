@@ -1,7 +1,7 @@
 # Converted CIDR rules with no-resolve
 # Source: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt
 # Rules: 5696
-# Generated: 2026-05-20T06:50:49.936Z
+# Generated: 2026-05-21T06:55:05.194Z
 
 IP-CIDR,1.1.8.0/24,no-resolve
 IP-CIDR,1.2.4.0/24,no-resolve
