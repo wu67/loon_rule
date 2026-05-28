@@ -1,57 +1,15 @@
 #!/usr/bin/env node
-/**
- * scripts/convert_to_loon_no_action.js
- *
- * 仅解析 JSON 的 rules 数组中每个对象的三个数组属性：
- *   - domain
- *   - domain_suffix
- *   - domain_keyword
- *
- * 并把它们转换为 Loon 格式的规则（TYPE,CONTENT）写入输出文件（默认 reject.txt）。
- *
- * 用法:
- *   node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE> [--verbose]
- *
- * 要求: Node >= 18（使用全局 fetch）
- */
 import fs from 'fs'
 import path from 'path'
 import process from 'process'
 
-const DEFAULT_URL =
-  'https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json'
-const DEFAULT_OUTPUT = 'reject.txt'
+// ─── Domain Utilities ─────────────────────────────────────────────────────────
 
-function parseArgs() {
-  const args = process.argv.slice(2)
-  const opt = { url: DEFAULT_URL, output: DEFAULT_OUTPUT, verbose: false }
-  for (let i = 0; i < args.length; i++) {
-    const a = args[i]
-    if (a === '--url' || a === '-u') {
-      opt.url = args[++i]
-      continue
-    }
-    if (a === '--output' || a === '-o') {
-      opt.output = args[++i]
-      continue
-    }
-    if (a === '--verbose' || a === '-v') {
-      opt.verbose = true
-      continue
-    }
-    if (a === '--help' || a === '-h') {
-      console.log(
-        'Usage: node scripts/convert_to_loon_no_action.js --url <JSON_URL> --output <OUTPUT_FILE>',
-      )
-      process.exit(0)
-    }
-  }
-  return opt
-}
-let whiteList = [
-  'kurogame.xyz', // 库洛游戏(鸣潮)
-] // 规避上游未知原因意外引入的规则, 导致部分服务无法正常使用
 function cleanDomainCandidate(raw) {
+  // 规避上游未知原因意外引入的规则, 导致部分服务无法正常使用
+  const whiteList = [
+    'kurogame.xyz', // 库洛游戏(鸣潮)
+  ]
   if (!raw || typeof raw !== 'string') return null
   let s = raw.trim()
   if (!s) return null
@@ -75,6 +33,8 @@ function cleanDomainCandidate(raw) {
   return s
 }
 
+// ─── HTTP Utilities ───────────────────────────────────────────────────────────
+
 async function fetchJson(url) {
   const res = await fetch(url, { method: 'GET' })
   if (!res.ok) throw new Error(`Failed fetch ${url}: ${res.status} ${res.statusText}`)
@@ -87,16 +47,11 @@ async function fetchText(url) {
   return res.text()
 }
 
-async function fetchAndConvertCIDR() {
-  const url =
-    'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt'
-  console.error('[INFO] fetching CIDR rules from', url)
+// ─── CIDR Utilities ───────────────────────────────────────────────────────────
 
-  const text = await fetchText(url)
-  const lines = text.split('\n').filter((line) => line.trim())
-
-  // 为每一行添加 ,no-resolve
-  const convertedLines = lines
+function buildCIDRLines(text) {
+  return text
+    .split('\n')
     .map((line) => {
       const trimmed = line.trim()
       if (!trimmed) return null
@@ -105,241 +60,224 @@ async function fetchAndConvertCIDR() {
       return `${trimmed},no-resolve`
     })
     .filter(Boolean)
+}
 
-  // 写入到 ip.txt（项目根目录）
-  const outputPath = path.resolve(process.cwd(), 'ip.txt')
-
+function writeCIDRFile(outputPath, url, lines) {
   const header = [
     '# Converted CIDR rules with no-resolve',
     `# Source: ${url}`,
-    `# Rules: ${convertedLines.length}`,
+    `# Rules: ${lines.length}`,
     `# Generated: ${new Date().toISOString()}`,
     '',
   ]
-
-  const outputContent = header.concat(convertedLines).join('\n') + '\n'
-  fs.writeFileSync(outputPath, outputContent, { encoding: 'utf8' })
-
-  console.error(`[INFO] wrote ${convertedLines.length} CIDR rules to ip.txt`)
+  fs.mkdirSync(path.dirname(outputPath) || '.', { recursive: true })
+  fs.writeFileSync(outputPath, header.concat(lines).join('\n') + '\n', { encoding: 'utf8' })
 }
 
-async function fetchAndConvertPCDN() {
+async function fetchAndWriteCIDR(url, outputFile, label) {
+  console.error(`[INFO] fetching ${label} rules from`, url)
+  const text = await fetchText(url)
+  const lines = buildCIDRLines(text)
+  const outputPath = path.resolve(process.cwd(), outputFile)
+  writeCIDRFile(outputPath, url, lines)
+  console.error(`[INFO] wrote ${lines.length} ${label} rules to ${outputFile}`)
+}
+
+// ─── Fetch & Write Tasks ──────────────────────────────────────────────────────
+
+async function fetchAndConvertCIDR() {
+  await fetchAndWriteCIDR(
+    'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/cncidr.txt',
+    'ip.txt',
+    'CIDR',
+  )
+}
+
+async function fetchAndConvertCIDROfTG() {
+  const url = 'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/telegramcidr.txt'
+  console.error('[INFO] fetching TG CIDR rules from', url)
+  const text = await fetchText(url)
+  return buildCIDRLines(text)
+}
+
+async function fetchAndWritePCDN() {
   const url =
     'https://github.com/Yuu518/sing-box-rules/raw/refs/heads/rule_set/rule_set_site/pcdn-cn.json'
   console.error('[INFO] fetching PCDN rules from', url)
 
   const json = await fetchJson(url)
-  if (!json || typeof json !== 'object') {
-    throw new Error('Invalid JSON response')
-  }
+  if (!json || typeof json !== 'object') throw new Error('Invalid JSON response')
 
   const rules = json.rules
-  if (!Array.isArray(rules) || rules.length === 0) {
-    throw new Error('rules is not an array or empty')
-  }
+  if (!Array.isArray(rules) || rules.length === 0) throw new Error('rules is not an array or empty')
 
   const domainSuffixes = rules[0].domain_suffix
-  if (!Array.isArray(domainSuffixes)) {
-    throw new Error('rules[0].domain_suffix is not an array')
-  }
+  if (!Array.isArray(domainSuffixes)) throw new Error('rules[0].domain_suffix is not an array')
 
-  const pcdnRules = []
-  for (const suffix of domainSuffixes) {
-    if (typeof suffix === 'string') {
-      const cleaned = cleanDomainCandidate(suffix)
-      if (cleaned) {
-        pcdnRules.push(`DOMAIN-SUFFIX,${cleaned}`)
-      }
-    }
-  }
-
-  console.error(`[INFO] extracted ${pcdnRules.length} PCDN rules`)
-  return pcdnRules
-}
-let fetchAndConvertCIDROfTG = async () => {
-  const url = 'https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/telegramcidr.txt'
-  console.error('[INFO] fetching TG CIDR rules from', url)
-  const text = await fetchText(url)
-  const lines = text.split('\n').filter((line) => line.trim())
-
-  // 为每一行添加 ,no-resolve
-  const convertedLines = lines
-    .map((line) => {
-      const trimmed = line.trim()
-      if (!trimmed) return null
-      // 如果已经包含 no-resolve，则不重复添加
-      if (trimmed.includes('no-resolve')) return trimmed
-      return `${trimmed},no-resolve`
-    })
+  const pcdnRules = domainSuffixes
+    .filter((s) => typeof s === 'string')
+    .map((s) => cleanDomainCandidate(s))
     .filter(Boolean)
-
-  // 写入到txt（项目根目录）
-  const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
+    .map((s) => `DOMAIN-SUFFIX,${s}`)
 
   const header = [
-    '# Converted CIDR rules with no-resolve',
-    `# Source: ${url}`,
-    `# Rules: ${convertedLines.length}`,
+    '# Converted PCDN rules',
+    `# Source: PCDN-CN`,
+    `# Rules: ${pcdnRules.length}`,
     `# Generated: ${new Date().toISOString()}`,
     '',
   ]
+  const outputPath = path.resolve(process.cwd(), 'pcdn.txt')
+  fs.writeFileSync(outputPath, header.concat(pcdnRules).join('\n') + '\n', { encoding: 'utf8' })
 
-  fs.mkdirSync(path.dirname(outputPath) || '.', { recursive: true })
-  const outputContent = header.concat(convertedLines).join('\n') + '\n'
-  fs.writeFileSync(outputPath, outputContent, { encoding: 'utf8' })
+  console.error(`[INFO] wrote ${pcdnRules.length} PCDN rules to pcdn.txt`)
 }
-async function main() {
-  const opt = parseArgs()
 
-  // 自动执行 CIDR 规则转换，失败不影响后续流程
-  try {
-    await fetchAndConvertCIDR()
-  } catch (err) {
-    console.error('[WARN] CIDR conversion failed:', err.message || err)
-  }
-  try {
-    await fetchAndConvertCIDROfTG()
-  } catch (err) {
-    console.error('[WARN] TG CIDR conversion failed:', err.message || err)
-  }
+// ─── Rule Processing ──────────────────────────────────────────────────────────
 
-  if (opt.verbose) console.error(`[INFO] fetching ${opt.url}`)
-  let j
-  try {
-    j = await fetchJson(opt.url)
-  } catch (err) {
-    console.error('[ERROR] fetch JSON failed:', err.message || err)
-    process.exit(2)
-  }
-
-  if (!j || typeof j !== 'object') {
-    console.error('[ERROR] fetched JSON is not an object')
-    process.exit(2)
-  }
-
-  const rules = j.rules
-  if (!Array.isArray(rules)) {
-    console.error('[ERROR] JSON.rules is not an array or missing')
-    // 为兼容性：写 header-only 并退出 0（或根据需要改为非0）
-    const headerOnly =
-      [
-        '# Converted by scripts/convert_to_loon_no_action.js',
-        `# Source: ${opt.url}`,
-        `# Rules: 0`,
-        '# Format: TYPE,CONTENT (no action column)',
-        '',
-      ].join('\n') + '\n'
-    const outPath0 = path.resolve(process.cwd(), opt.output)
-    fs.mkdirSync(path.dirname(outPath0) || '.', { recursive: true })
-    fs.writeFileSync(outPath0, headerOnly, { encoding: 'utf8' })
-    console.error('[INFO] wrote header-only output file because rules is missing or not an array')
-    return
-  }
-
-  const outSet = new Set()
+function extractRules(rules) {
+  const domainMap = new Map()
+  const domainSuffixMap = new Map()
+  const domainKeywordSet = new Set()
   let countDomain = 0,
     countDomainSuffix = 0,
     countKeyword = 0
 
-  // 使用 Map 分别存储不同类型的规则，便于去重
-  const domainMap = new Map() // 存储 DOMAIN 规则
-  const domainSuffixMap = new Map() // 存储 DOMAIN-SUFFIX 规则
-  const domainKeywordSet = new Set() // DOMAIN-KEYWORD 规则
-
   for (const ruleObj of rules) {
     if (!ruleObj || typeof ruleObj !== 'object') continue
 
-    const dom = ruleObj.domain
-    if (Array.isArray(dom)) {
-      for (const item of dom) {
-        if (typeof item !== 'string') continue
-        const s = cleanDomainCandidate(item)
-        if (!s) continue
-        domainMap.set(s, true)
-        countDomain++
+    if (Array.isArray(ruleObj.domain)) {
+      for (const item of ruleObj.domain) {
+        const s = typeof item === 'string' ? cleanDomainCandidate(item) : null
+        if (s) {
+          domainMap.set(s, true)
+          countDomain++
+        }
       }
     }
 
-    const domsuf = ruleObj.domain_suffix
-    if (Array.isArray(domsuf)) {
-      for (const item of domsuf) {
-        if (typeof item !== 'string') continue
-        const s = cleanDomainCandidate(item)
-        if (!s) continue
-        domainSuffixMap.set(s, true)
-        countDomainSuffix++
+    if (Array.isArray(ruleObj.domain_suffix)) {
+      for (const item of ruleObj.domain_suffix) {
+        const s = typeof item === 'string' ? cleanDomainCandidate(item) : null
+        if (s) {
+          domainSuffixMap.set(s, true)
+          countDomainSuffix++
+        }
       }
     }
 
-    const dkeyword = ruleObj.domain_keyword
-    if (Array.isArray(dkeyword)) {
-      for (const item of dkeyword) {
-        if (typeof item !== 'string') continue
-        const s = cleanDomainCandidate(item)
-        if (!s) continue
-        domainKeywordSet.add(s)
-        countKeyword++
+    if (Array.isArray(ruleObj.domain_keyword)) {
+      for (const item of ruleObj.domain_keyword) {
+        const s = typeof item === 'string' ? cleanDomainCandidate(item) : null
+        if (s) {
+          domainKeywordSet.add(s)
+          countKeyword++
+        }
       }
     }
   }
 
+  return {
+    domainMap,
+    domainSuffixMap,
+    domainKeywordSet,
+    counts: { domain: countDomain, suffix: countDomainSuffix, keyword: countKeyword },
+  }
+}
+
+function mergeRules(domainMap, domainSuffixMap, domainKeywordSet) {
+  const outSet = new Set()
   // 合并规则：如果同时存在 DOMAIN 和 DOMAIN-SUFFIX，只保留 DOMAIN-SUFFIX
-  for (const domain of domainSuffixMap.keys()) {
-    outSet.add(`DOMAIN-SUFFIX,${domain}`)
-  }
+  for (const domain of domainSuffixMap.keys()) outSet.add(`DOMAIN-SUFFIX,${domain}`)
   for (const domain of domainMap.keys()) {
-    if (!domainSuffixMap.has(domain)) {
-      outSet.add(`DOMAIN,${domain}`)
-    }
+    if (!domainSuffixMap.has(domain)) outSet.add(`DOMAIN,${domain}`)
   }
-  for (const keyword of domainKeywordSet) {
-    outSet.add(`DOMAIN-KEYWORD,${keyword}`)
-  }
+  for (const keyword of domainKeywordSet) outSet.add(`DOMAIN-KEYWORD,${keyword}`)
+  return Array.from(outSet).sort((a, b) => a.localeCompare(b))
+}
 
-  const lines = Array.from(outSet).sort((a, b) => a.localeCompare(b))
-  if (opt.verbose) {
-    console.error(
-      `[INFO] extracted raw counts -> domain: ${countDomain}, domain_suffix: ${countDomainSuffix}, domain_keyword: ${countKeyword}`,
-    )
-    console.error(`[INFO] unique rules after dedupe: ${lines.length}`)
-  }
+function processRules(rules) {
+  const { domainMap, domainSuffixMap, domainKeywordSet, counts } = extractRules(rules)
+  const lines = mergeRules(domainMap, domainSuffixMap, domainKeywordSet)
+  return { lines, counts }
+}
 
-  // 获取并写入 PCDN 规则到 pcdn.txt
-  try {
-    const pcdnRules = await fetchAndConvertPCDN()
+// ─── Fetch & Write Tasks (continued) ─────────────────────────────────────────
 
-    // 写入 pcdn.txt
-    const pcdnHeader = [
-      '# Converted PCDN rules',
-      `# Source: PCDN-CN`,
-      `# Rules: ${pcdnRules.length}`,
-      `# Generated: ${new Date().toISOString()}`,
-      '',
-    ]
-    const pcdnText = pcdnHeader.concat(pcdnRules).join('\n') + '\n'
-    const pcdnPath = path.resolve(process.cwd(), 'pcdn.txt')
-    fs.writeFileSync(pcdnPath, pcdnText, { encoding: 'utf8' })
+async function fetchAndWriteAdsRules() {
+  const url =
+    'https://raw.githubusercontent.com/Yuu518/sing-box-rules/rule_set/rule_set_site/category-ads-all.json'
+  const outputFile = 'reject.txt'
+  console.error('[INFO] fetching ads rules from', url)
 
-    if (opt.verbose) {
-      console.error(`[INFO] wrote ${pcdnRules.length} PCDN rules to pcdn.txt`)
-    }
-  } catch (err) {
-    console.error('[WARN] PCDN rules fetch failed:', err.message || err)
-  }
+  const json = await fetchJson(url)
+  if (!json || typeof json !== 'object') throw new Error('fetched JSON is not an object')
+  if (!Array.isArray(json.rules)) throw new Error('JSON.rules is not an array or missing')
+
+  const { lines } = processRules(json.rules)
 
   const header = [
     '# Converted by scripts/convert_to_loon_no_action.js',
-    `# Source: ${opt.url}`,
+    `# Source: ${url}`,
     `# Rules: ${lines.length}`,
     '# Format: TYPE,CONTENT (no action column)',
     '',
   ]
-  const outText = header.concat(lines).join('\n') + '\n'
-  const outPath = path.resolve(process.cwd(), opt.output)
+  const outPath = path.resolve(process.cwd(), outputFile)
   fs.mkdirSync(path.dirname(outPath) || '.', { recursive: true })
-  fs.writeFileSync(outPath, outText, { encoding: 'utf8' })
+  fs.writeFileSync(outPath, header.concat(lines).join('\n') + '\n', { encoding: 'utf8' })
 
-  if (opt.verbose) console.error(`[INFO] wrote ${lines.length} rules to ${opt.output}`)
+  console.error(`[INFO] wrote ${lines.length} ads rules to ${outputFile}`)
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// 来源 https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Shadowrocket/Apple/Apple.list
+const AppleIP = [
+  'IP-CIDR,139.178.128.0/18,no-resolve',
+  'IP-CIDR,144.178.0.0/19,no-resolve',
+  'IP-CIDR,144.178.36.0/22,no-resolve',
+  'IP-CIDR,144.178.48.0/20,no-resolve',
+  'IP-CIDR,17.0.0.0/8,no-resolve',
+  'IP-CIDR,192.35.50.0/24,no-resolve',
+  'IP-CIDR,198.183.17.0/24,no-resolve',
+  'IP-CIDR,205.180.175.0/24,no-resolve',
+  'IP-CIDR,2403:300::/32,no-resolve',
+  'IP-CIDR,2620:149::/32,no-resolve',
+  'IP-CIDR,2a01:b740::/32,no-resolve',
+  'IP-CIDR,63.92.224.0/19,no-resolve',
+  'IP-CIDR,65.199.22.0/23,no-resolve',
+]
+
+function writeProxyIP(lines) {
+  const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
+  const header = [
+    '# Proxy IP rules (TG CIDR + Apple IP)',
+    `# Rules: ${lines.length}`,
+    `# Generated: ${new Date().toISOString()}`,
+    '',
+  ]
+  fs.mkdirSync(path.dirname(outputPath) || '.', { recursive: true })
+  fs.writeFileSync(outputPath, header.concat(lines).join('\n') + '\n', { encoding: 'utf8' })
+  console.error(`[INFO] wrote ${lines.length} proxy IP rules to proxy_ip.txt`)
+}
+
+async function runSafely(label, fn) {
+  try {
+    await fn()
+  } catch (err) {
+    console.error(`[WARN] ${label} failed:`, err.message || err)
+  }
+}
+
+async function main() {
+  await runSafely('CIDR conversion', fetchAndConvertCIDR)
+  await runSafely('proxy IP conversion', async () => {
+    const tgLines = await fetchAndConvertCIDROfTG()
+    writeProxyIP([...tgLines, ...AppleIP])
+  })
+  await runSafely('PCDN conversion', fetchAndWritePCDN)
+  await runSafely('Ads rules conversion', fetchAndWriteAdsRules)
 }
 
 main().catch((err) => {
