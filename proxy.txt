@@ -68,11 +68,16 @@ DOMAIN-SUFFIX,featuregates.org
 DOMAIN-SUFFIX,featureassets.org
 DOMAIN-SUFFIX,statsigapi.net
 DOMAIN-SUFFIX,anthropic.com
+DOMAIN-KEYWORD,anthropic
 DOMAIN-SUFFIX,claude.ai
 DOMAIN-SUFFIX,claude.json
 DOMAIN-SUFFIX,claude.code
+DOMAIN-KEYWORD,claude
 DOMAIN-SUFFIX,cursor.com
 DOMAIN-SUFFIX,cursor.sh
+DOMAIN-SUFFIX,cursor-cdn.com
+DOMAIN-SUFFIX,replit.com
+DOMAIN-SUFFIX,replit.dev
 DOMAIN-SUFFIX,todesktop.com
 DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,perplexity.ai
