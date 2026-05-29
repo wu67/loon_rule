@@ -1,0 +1,6 @@
+# 这是为了方便分流到不同节点而特地拆分出来的
+DOMAIN-KEYWORD,kurogame
+DOMAIN-KEYWORD,wutheringwaves
+DOMAIN-SUFFIX,aki-game.com
+DOMAIN-SUFFIX,aki-game.net
+DOMAIN-SUFFIX,aki-game2.com
