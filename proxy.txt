@@ -8,6 +8,9 @@ DOMAIN-KEYWORD,amazon
 # > Docker Ecosystem (Optimized with Keyword)
 DOMAIN-KEYWORD,docker
 
+DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,apple.com
+
 # > Microsoft
 DOMAIN-SUFFIX,microsoft.com
 DOMAIN-SUFFIX,live.com
@@ -55,6 +58,7 @@ DOMAIN-KEYWORD,typekit
 DOMAIN-KEYWORD,adobe
 
 # > AI Ecosystem (Web, API, Auth & CDN)
+DOMAIN-KEYWORD,gemini
 DOMAIN-SUFFIX,openai.com
 DOMAIN-SUFFIX,chatgpt.com
 DOMAIN-SUFFIX,oaistatic.com
