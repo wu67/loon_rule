@@ -1,34 +1,135 @@
-DOMAIN-SUFFIX,apple-mapkit.com
-DOMAIN-SUFFIX,aaplimg.com
-DOMAIN-SUFFIX,akadns.net
-DOMAIN-SUFFIX,apple.com
-DOMAIN-KEYWORD,apple
-DOMAIN-KEYWORD,mzstatic
-DOMAIN-SUFFIX,me.com
-DOMAIN-KEYWORD,icloud
-DOMAIN-KEYWORD,npmjs
-DOMAIN-KEYWORD,google
+# > GitHub Ecosystem (Optimized with Keyword)
 DOMAIN-KEYWORD,github
-DOMAIN-KEYWORD,copilot
-DOMAIN-KEYWORD,cloudflare
-DOMAIN-KEYWORD,docker
-DOMAIN-KEYWORD,openai
-DOMAIN-SUFFIX,cursor.com
-DOMAIN-KEYWORD,debian
+DOMAIN-KEYWORD,githubusercontent
+
+# > Amazon & AWS (Optimized with Keyword)
 DOMAIN-KEYWORD,amazon
-DOMAIN-KEYWORD,zoho
-DOMAIN-SUFFIX,kelee.one
-DOMAIN-SUFFIX,jsdelivr.net
+
+# > Docker Ecosystem (Optimized with Keyword)
+DOMAIN-KEYWORD,docker
+
+# > Microsoft
+DOMAIN-SUFFIX,microsoft.com
+DOMAIN-SUFFIX,live.com
+DOMAIN-SUFFIX,outlook.com
+DOMAIN-SUFFIX,office.com
+DOMAIN-SUFFIX,office365.com
+DOMAIN-SUFFIX,visualstudio.com
 DOMAIN-SUFFIX,bing.com
+
+# > Developer Tools & Tech Ecosystem (Included Playgrounds & CDNs)
+DOMAIN-KEYWORD,pnpm
+DOMAIN-KEYWORD,yarnpkg
+DOMAIN-KEYWORD,figma
+DOMAIN-KEYWORD,jsdelivr
+DOMAIN-KEYWORD,cdnjs
+DOMAIN-KEYWORD,unpkg
+DOMAIN-KEYWORD,codesandbox
+DOMAIN-KEYWORD,codepen
+DOMAIN-KEYWORD,stackblitz
+DOMAIN-SUFFIX,nodejs.org
+DOMAIN-SUFFIX,jsfiddle.net
+DOMAIN-SUFFIX,npmjs.com
+DOMAIN-SUFFIX,golang.org
+DOMAIN-SUFFIX,rust-lang.org
+DOMAIN-SUFFIX,crates.io
+DOMAIN-SUFFIX,vercel.app
+DOMAIN-SUFFIX,netlify.app
+DOMAIN-SUFFIX,git-scm.com
+DOMAIN-SUFFIX,stackoverflow.com
+DOMAIN-SUFFIX,deno.land
+DOMAIN-SUFFIX,bun.sh
+DOMAIN-SUFFIX,developer.mozilla.org
+DOMAIN-SUFFIX,supabase.com
+DOMAIN-SUFFIX,prisma.io
+DOMAIN-SUFFIX,expo.dev
+DOMAIN-SUFFIX,sentry.io
+DOMAIN-SUFFIX,gravatar.com
+DOMAIN-SUFFIX,excalidraw.com
+DOMAIN-KEYWORD,atlassian
+DOMAIN-SUFFIX,greasyfork.org
+DOMAIN-KEYWORD,huggingface
+DOMAIN-SUFFIX,v0.dev
+DOMAIN-SUFFIX,zoom.us
+DOMAIN-KEYWORD,typekit
+DOMAIN-KEYWORD,adobe
+
+# > AI Ecosystem (Web, API, Auth & CDN)
+DOMAIN-SUFFIX,openai.com
+DOMAIN-SUFFIX,chatgpt.com
+DOMAIN-SUFFIX,oaistatic.com
+DOMAIN-SUFFIX,oaiusercontent.com
+DOMAIN-SUFFIX,openaimerge.com
+DOMAIN-SUFFIX,featuregates.org
+DOMAIN-SUFFIX,featureassets.org
+DOMAIN-SUFFIX,statsigapi.net
+DOMAIN-SUFFIX,anthropic.com
+DOMAIN-SUFFIX,claude.ai
+DOMAIN-SUFFIX,claude.json
+DOMAIN-SUFFIX,claude.code
+DOMAIN-SUFFIX,cursor.com
+DOMAIN-SUFFIX,cursor.sh
+DOMAIN-SUFFIX,todesktop.com
+DOMAIN-SUFFIX,midjourney.com
+DOMAIN-SUFFIX,perplexity.ai
+DOMAIN-KEYWORD,auth0
+DOMAIN-SUFFIX,identrust.com
+
+# > Productivity & Cloud
+DOMAIN-KEYWORD,mega
+DOMAIN-SUFFIX,notion.so
+DOMAIN-SUFFIX,v2ex.com
+DOMAIN-SUFFIX,medium.com
+DOMAIN-SUFFIX,dropbox.com
+DOMAIN-SUFFIX,onedrive.com
+DOMAIN-SUFFIX,cloudflare.com
+DOMAIN-SUFFIX,quora.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN-SUFFIX,intercomcdn.com
+
+# > Social & Media
+DOMAIN-SUFFIX,twitter.com
+DOMAIN-SUFFIX,x.com
+DOMAIN-SUFFIX,twimg.com
+DOMAIN-SUFFIX,facebook.com
+DOMAIN-SUFFIX,fbcdn.net
+DOMAIN-SUFFIX,instagram.com
+DOMAIN-SUFFIX,cdninstagram.com
+DOMAIN-SUFFIX,wikipedia.org
+DOMAIN-SUFFIX,wikimedia.org
+DOMAIN-SUFFIX,reddit.com
+DOMAIN-SUFFIX,redditmedia.com
+DOMAIN-SUFFIX,pinterest.com
+DOMAIN-SUFFIX,pinimg.com
+DOMAIN-SUFFIX,tumblr.com
+DOMAIN-SUFFIX,line.me
+
+# > Video, Audio & Live Streaming
 DOMAIN-SUFFIX,netflix.com
-DOMAIN-SUFFIX,wzip.ru
-DOMAIN-SUFFIX,php.net
-DOMAIN-SUFFIX,wnacg.com
-DOMAIN-SUFFIX,xn--ngstr-lra8j.com
-DOMAIN-SUFFIX,miobt.com
+DOMAIN-SUFFIX,nflxvideo.net
+DOMAIN-SUFFIX,disneyplus.com
+DOMAIN-SUFFIX,twitch.tv
+DOMAIN-SUFFIX,ttvnw.net
+DOMAIN-SUFFIX,vimeo.com
+DOMAIN-SUFFIX,soundcloud.com
+DOMAIN-SUFFIX,pixiv.net
+
+# > Common Utilities & Search
+DOMAIN-SUFFIX,imgur.com
+DOMAIN-SUFFIX,archive.org
+DOMAIN-SUFFIX,duckduckgo.com
+DOMAIN-SUFFIX,tinyurl.com
+
+# > Global News
+DOMAIN-SUFFIX,bbc.com
+DOMAIN-SUFFIX,bbc.co.uk
+DOMAIN-SUFFIX,nytimes.com
+
+# red note
 DOMAIN-SUFFIX,xiaohongshu.com
 DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-KEYWORD,xhscdn
+
 # tg
 DOMAIN-SUFFIX,t.me
 DOMAIN-SUFFIX,tg.dev
@@ -39,6 +140,30 @@ DOMAIN-SUFFIX,tdesktop.com
 DOMAIN-SUFFIX,comments.app
 DOMAIN-SUFFIX,graph.org
 DOMAIN-KEYWORD,telegram
-# tg end
-DOMAIN-SUFFIX,v2ex.com
-DOMAIN-SUFFIX,6vw.cc,PROXY
+
+# my video dl site
+DOMAIN-SUFFIX,miobt.com
+DOMAIN-SUFFIX,6vw.cc
+
+# > Global NSFW Services
+DOMAIN-KEYWORD,missav
+DOMAIN-KEYWORD,pornhub
+DOMAIN-KEYWORD,xvideos
+DOMAIN-KEYWORD,xnxx
+DOMAIN-SUFFIX,phncdn.com
+DOMAIN-SUFFIX,javbus.com
+DOMAIN-SUFFIX,javlibrary.com
+DOMAIN-SUFFIX,e-hentai.org
+DOMAIN-SUFFIX,exhentai.org
+DOMAIN-SUFFIX,ehgt.org
+DOMAIN-SUFFIX,wnacg.com
+
+# other
+DOMAIN-SUFFIX,kelee.one
+DOMAIN-KEYWORD,stripe
+DOMAIN-SUFFIX,ebay.com
+DOMAIN-SUFFIX,unsplash.com
+DOMAIN-KEYWORD,epicgames
+DOMAIN-KEYWORD,steamstat
+DOMAIN-KEYWORD,steampowered
+DOMAIN-SUFFIX,steamcommunity.com
