@@ -168,6 +168,7 @@ DOMAIN-SUFFIX,e-hentai.org
 DOMAIN-SUFFIX,exhentai.org
 DOMAIN-SUFFIX,ehgt.org
 DOMAIN-SUFFIX,wnacg.com
+DOMAIN-SUFFIX,nyaa.si
 
 # other
 DOMAIN-SUFFIX,kelee.one
