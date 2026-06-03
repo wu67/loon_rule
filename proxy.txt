@@ -247,6 +247,9 @@ DOMAIN-SUFFIX,steamcommunity.com
 DOMAIN-SUFFIX,fastly.net
 DOMAIN-SUFFIX,godaddy.com
 DOMAIN-SUFFIX,linux.do
+DOMAIN-SUFFIX,zoho.com
+DOMAIN-SUFFIX,zohocdn.com
+DOMAIN-SUFFIX,zohostatic.com
 
 # DNS Leak
 DOMAIN-SUFFIX,dnsleaktest.com
