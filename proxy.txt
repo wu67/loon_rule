@@ -250,6 +250,7 @@ DOMAIN-SUFFIX,linux.do
 DOMAIN-SUFFIX,zoho.com
 DOMAIN-SUFFIX,zohocdn.com
 DOMAIN-SUFFIX,zohostatic.com
+DOMAIN-SUFFIX,sspanel.net
 
 # DNS Leak
 DOMAIN-SUFFIX,dnsleaktest.com
