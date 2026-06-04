@@ -244,7 +244,7 @@ DOMAIN-KEYWORD,epicgames
 DOMAIN-KEYWORD,steamstat
 DOMAIN-KEYWORD,steampowered
 DOMAIN-SUFFIX,steamcommunity.com
-DOMAIN-SUFFIX,sspanel.net
+DOMAIN-SUFFIX,gamer.com.tw
 DOMAIN-SUFFIX,fastly.net
 DOMAIN-SUFFIX,godaddy.com
 DOMAIN-SUFFIX,linux.do
