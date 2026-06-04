@@ -113,6 +113,7 @@ DOMAIN-SUFFIX,v0.dev
 DOMAIN-SUFFIX,zoom.us
 DOMAIN-KEYWORD,typekit
 DOMAIN-KEYWORD,adobe
+DOMAIN-SUFFIX,f-droid.org
 
 # > AI Ecosystem (Web, API, Auth & CDN)
 DOMAIN-KEYWORD,gemini
