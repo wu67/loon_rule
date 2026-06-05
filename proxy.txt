@@ -65,6 +65,7 @@ DOMAIN-SUFFIX,x.company
 DOMAIN-SUFFIX,xn--ngstr-lra8j.com
 DOMAIN-SUFFIX,youtu.be
 DOMAIN-SUFFIX,yt.be
+DOMAIN-KEYWORD,youtube
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,apple.com
 
