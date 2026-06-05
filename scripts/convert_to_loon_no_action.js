@@ -271,7 +271,8 @@ async function runSafely(label, fn) {
 }
 
 async function main() {
-  await runSafely('CIDR conversion', fetchAndConvertCIDR)
+  // 不再使用名单直连兜底代理的方式, 因为苹果无法分应用代理, 有应用偷偷连国外的钓鱼服务器导致ip送中.
+  // await runSafely('CIDR conversion', fetchAndConvertCIDR)
   await runSafely('proxy IP conversion', async () => {
     const tgLines = await fetchAndConvertCIDROfTG()
     writeProxyIP([...tgLines, ...AppleIP])
