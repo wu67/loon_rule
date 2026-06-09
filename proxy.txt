@@ -70,6 +70,7 @@ DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,apple.com
 # 处理部分奇葩cdn域名
 DOMAIN-KEYWORD,apple.com
+DOMAIN-KEYWORD,ioshost.qtlcdn.com
 
 # > Microsoft
 DOMAIN-SUFFIX,microsoft.com
