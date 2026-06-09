@@ -109,6 +109,9 @@ DOMAIN-KEYWORD,mozilla
 DOMAIN-SUFFIX,firefox.com
 DOMAIN-SUFFIX,supabase.com
 DOMAIN-SUFFIX,prisma.io
+DOMAIN-SUFFIX,prisma.ai
+DOMAIN-SUFFIX,prisma-design.com
+DOMAIN-SUFFIX,prisma-cdn.com
 DOMAIN-SUFFIX,expo.dev
 DOMAIN-SUFFIX,sentry.io
 DOMAIN-SUFFIX,gravatar.com
