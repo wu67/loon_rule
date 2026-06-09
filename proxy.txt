@@ -104,7 +104,9 @@ DOMAIN-SUFFIX,git-scm.com
 DOMAIN-SUFFIX,stackoverflow.com
 DOMAIN-SUFFIX,deno.land
 DOMAIN-SUFFIX,bun.sh
-DOMAIN-SUFFIX,developer.mozilla.org
+DOMAIN-SUFFIX,mozilla.org
+DOMAIN-KEYWORD,mozilla
+DOMAIN-SUFFIX,firefox.com
 DOMAIN-SUFFIX,supabase.com
 DOMAIN-SUFFIX,prisma.io
 DOMAIN-SUFFIX,expo.dev
