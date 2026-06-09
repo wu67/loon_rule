@@ -68,6 +68,8 @@ DOMAIN-SUFFIX,yt.be
 DOMAIN-KEYWORD,youtube
 DOMAIN-SUFFIX,ytimg.com
 DOMAIN-SUFFIX,apple.com
+# 处理部分奇葩cdn域名
+DOMAIN-KEYWORD,apple.com
 
 # > Microsoft
 DOMAIN-SUFFIX,microsoft.com
