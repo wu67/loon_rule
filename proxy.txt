@@ -1,6 +1,7 @@
 # > GitHub Ecosystem (Optimized with Keyword)
 DOMAIN-KEYWORD,github
 DOMAIN-KEYWORD,githubusercontent
+DOMAIN-SUFFIX,ghcr.io
 
 # > Amazon & AWS (Optimized with Keyword)
 DOMAIN-KEYWORD,amazon
