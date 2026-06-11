@@ -248,6 +248,32 @@ DOMAIN-SUFFIX,exhentai.org
 DOMAIN-SUFFIX,ehgt.org
 DOMAIN-SUFFIX,wnacg.com
 DOMAIN-SUFFIX,nyaa.si
+# bt tracker
+DOMAIN-SUFFIX,acgtracker.com
+DOMAIN-SUFFIX,bangumi.moe
+DOMAIN-SUFFIX,desync.com
+DOMAIN-SUFFIX,durukanbal.com
+DOMAIN-SUFFIX,ghostchu-services.top
+DOMAIN-SUFFIX,itzmx.com
+DOMAIN-SUFFIX,ixuexi.click
+DOMAIN-SUFFIX,nyaa.tracker.wf
+DOMAIN-SUFFIX,open.demonii.com
+DOMAIN-SUFFIX,open.stealth.si
+DOMAIN-SUFFIX,opentorrent.top
+DOMAIN-SUFFIX,opentrackr.org
+DOMAIN-SUFFIX,playground.ru
+DOMAIN-SUFFIX,plx.im
+DOMAIN-SUFFIX,projectk.org
+DOMAIN-SUFFIX,publicbt.com
+DOMAIN-SUFFIX,qu.ax
+DOMAIN-SUFFIX,srv00.com
+DOMAIN-SUFFIX,sukebei.tracker.wf
+DOMAIN-SUFFIX,t-1.org
+DOMAIN-SUFFIX,theoks.net
+DOMAIN-SUFFIX,torrent.eu.org
+DOMAIN-SUFFIX,tryhackx.org
+DOMAIN-SUFFIX,tvunderground.org.ru
+DOMAIN-SUFFIX,wepzone.net
 
 # other
 DOMAIN-SUFFIX,kelee.one
