@@ -292,6 +292,7 @@ DOMAIN-SUFFIX,zoho.com
 DOMAIN-SUFFIX,zohocdn.com
 DOMAIN-SUFFIX,zohostatic.com
 DOMAIN-SUFFIX,sspanel.net
+DOMAIN-SUFFIX,haitunt.org
 
 # DNS Leak
 DOMAIN-SUFFIX,dnsleaktest.com
