@@ -248,6 +248,8 @@ DOMAIN-SUFFIX,exhentai.org
 DOMAIN-SUFFIX,ehgt.org
 DOMAIN-SUFFIX,wnacg.com
 DOMAIN-SUFFIX,nyaa.si
+DOMAIN-SUFFIX,nhentai.to
+
 # bt tracker
 DOMAIN-SUFFIX,acgtracker.com
 DOMAIN-SUFFIX,bangumi.moe
