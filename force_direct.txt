@@ -1,3 +1,19 @@
 DOMAIN-SUFFIX,time.apple.com
 DOMAIN-SUFFIX,time-ios.apple.com
 DOMAIN-SUFFIX,time-macos.apple.com
+
+# 美团
+DOMAIN-KEYWORD,meituan
+DOMAIN-KEYWORD,dianping
+DOMAIN-SUFFIX,meituan.com
+DOMAIN-SUFFIX,meituan.net
+DOMAIN-SUFFIX,meituan.org
+DOMAIN-SUFFIX,dianping.com
+DOMAIN-SUFFIX,dpfile.com
+DOMAIN-SUFFIX,maoyan.com
+DOMAIN-SUFFIX,sankuai.com
+DOMAIN-SUFFIX,mtwaimai.com
+USER-AGENT,Meituan
+USER-AGENT,meituan*
+USER-AGENT,iMeituan*
+# 美团 end
