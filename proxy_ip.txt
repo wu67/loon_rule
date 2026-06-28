@@ -1,6 +1,6 @@
 # Proxy IP rules (TG CIDR + Apple IP)
 # Rules: 25
-# Generated: 2026-06-27T06:30:54.640Z
+# Generated: 2026-06-28T07:03:46.952Z
 
 IP-CIDR,91.105.192.0/23,no-resolve
 IP-CIDR,91.108.4.0/22,no-resolve
