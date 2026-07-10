@@ -232,23 +232,6 @@ async function fetchAndWriteAdsRules() {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-// 来源 https://github.com/blackmatrix7/ios_rule_script/blob/master/rule/Shadowrocket/Apple/Apple.list
-const AppleIP = [
-  'IP-CIDR,139.178.128.0/18,no-resolve',
-  'IP-CIDR,144.178.0.0/19,no-resolve',
-  'IP-CIDR,144.178.36.0/22,no-resolve',
-  'IP-CIDR,144.178.48.0/20,no-resolve',
-  'IP-CIDR,17.0.0.0/8,no-resolve',
-  'IP-CIDR,192.35.50.0/24,no-resolve',
-  'IP-CIDR,198.183.17.0/24,no-resolve',
-  'IP-CIDR,205.180.175.0/24,no-resolve',
-  'IP-CIDR,2403:300::/32,no-resolve',
-  'IP-CIDR,2620:149::/32,no-resolve',
-  'IP-CIDR,2a01:b740::/32,no-resolve',
-  'IP-CIDR,63.92.224.0/19,no-resolve',
-  'IP-CIDR,65.199.22.0/23,no-resolve',
-]
-
 function writeProxyIP(lines) {
   const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
   const header = [
@@ -275,7 +258,7 @@ async function main() {
   await runSafely('CIDR conversion', fetchAndConvertCIDR)
   await runSafely('proxy IP conversion', async () => {
     const tgLines = await fetchAndConvertCIDROfTG()
-    writeProxyIP([...tgLines, ...AppleIP])
+    writeProxyIP([...tgLines])
   })
   await runSafely('PCDN conversion', fetchAndWritePCDN)
   await runSafely('Ads rules conversion', fetchAndWriteAdsRules)
