@@ -88,6 +88,7 @@ DOMAIN-KEYWORD,unpkg
 DOMAIN-KEYWORD,codesandbox
 DOMAIN-KEYWORD,codepen
 DOMAIN-KEYWORD,stackblitz
+DOMAIN-SUFFIX,brew.sh
 DOMAIN-SUFFIX,nodejs.org
 DOMAIN-SUFFIX,jsfiddle.net
 DOMAIN-SUFFIX,npmjs.com
