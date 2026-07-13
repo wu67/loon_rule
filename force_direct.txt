@@ -17,3 +17,9 @@ USER-AGENT,Meituan
 USER-AGENT,meituan*
 USER-AGENT,iMeituan*
 # 美团 end
+
+# 自用
+DOMAIN-SUFFIX,promcollection.ca
+DOMAIN-SUFFIX,promocollection.com.au
+DOMAIN-SUFFIX,promocollection.com.cn
+
