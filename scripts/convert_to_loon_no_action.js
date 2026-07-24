@@ -230,12 +230,10 @@ async function fetchAndWriteAdsRules() {
   console.error(`[INFO] wrote ${lines.length} ads rules to ${outputFile}`)
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 function writeProxyIP(lines) {
   const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
   const header = [
-    '# Proxy IP rules (TG CIDR + Apple IP)',
+    '# Proxy IP rules',
     `# Rules: ${lines.length}`,
     `# Generated: ${new Date().toISOString()}`,
     '',
@@ -254,7 +252,6 @@ async function runSafely(label, fn) {
 }
 
 async function main() {
-  // 不再使用名单直连兜底代理的方式, 因为苹果无法分应用代理, 有应用偷偷连国外的钓鱼服务器导致ip送中.
   await runSafely('CIDR conversion', fetchAndConvertCIDR)
   await runSafely('proxy IP conversion', async () => {
     const tgLines = await fetchAndConvertCIDROfTG()
