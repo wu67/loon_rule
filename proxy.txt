@@ -210,11 +210,6 @@ DOMAIN-SUFFIX,bbc.com
 DOMAIN-SUFFIX,bbc.co.uk
 DOMAIN-SUFFIX,nytimes.com
 
-# red note
-DOMAIN-SUFFIX,xiaohongshu.com
-DOMAIN-SUFFIX,fengkongcloud.com
-DOMAIN-KEYWORD,xhscdn
-
 # tg
 DOMAIN-SUFFIX,t.me
 DOMAIN-SUFFIX,tg.dev
