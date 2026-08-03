@@ -258,7 +258,7 @@ async function main() {
     writeProxyIP([...tgLines])
   })
   await runSafely('PCDN conversion', fetchAndWritePCDN)
-  await runSafely('Ads rules conversion', fetchAndWriteAdsRules)
+  // await runSafely('Ads rules conversion', fetchAndWriteAdsRules)
 }
 
 main().catch((err) => {
