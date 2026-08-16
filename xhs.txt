@@ -1,3 +1,4 @@
 DOMAIN-SUFFIX,xiaohongshu.com
+DOMAIN-SUFFIX,xiaohongshu.net
 DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-KEYWORD,xhscdn
