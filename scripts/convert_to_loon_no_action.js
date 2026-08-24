@@ -100,6 +100,7 @@ async function fetchAndConvertCIDROfTG() {
   return buildCIDRLines(text)
 }
 
+let somePrivitePCDNRules = ['qiezibenpao.com', 'tianwenca.com', 'xinqiucc.com']
 async function fetchAndWritePCDN() {
   const url =
     'https://github.com/Yuu518/sing-box-rules/raw/refs/heads/rule_set/rule_set_site/pcdn-cn.json'
@@ -118,6 +119,7 @@ async function fetchAndWritePCDN() {
     .filter((s) => typeof s === 'string')
     .map((s) => cleanDomainCandidate(s))
     .filter(Boolean)
+    .concat(somePrivitePCDNRules)
     .map((s) => `DOMAIN-SUFFIX,${s}`)
 
   const header = [
