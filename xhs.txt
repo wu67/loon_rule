@@ -1,4 +1,6 @@
 DOMAIN-SUFFIX,xiaohongshu.com
 DOMAIN-SUFFIX,xiaohongshu.net
 DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-SUFFIX,rnote.com
+DOMAIN-KEYWORD,rednotecdn
 DOMAIN-KEYWORD,xhscdn
