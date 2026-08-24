@@ -4,3 +4,5 @@ DOMAIN-SUFFIX,fengkongcloud.com
 DOMAIN-SUFFIX,rnote.com
 DOMAIN-KEYWORD,rednotecdn
 DOMAIN-KEYWORD,xhscdn
+# 生动诗章科技 ai搜索, 被收购
+DOMAIN-KEYWORD,askdiandian
