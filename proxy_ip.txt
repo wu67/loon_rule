@@ -1,6 +1,6 @@
 # Proxy IP rules
 # Rules: 12
-# Generated: 2026-08-31T09:27:42.450Z
+# Generated: 2026-09-01T08:24:43.510Z
 
 IP-CIDR,91.105.192.0/23,no-resolve
 IP-CIDR,91.108.4.0/22,no-resolve
