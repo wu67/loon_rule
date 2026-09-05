@@ -40,6 +40,7 @@ DOMAIN-SUFFIX,gmodules.com
 DOMAIN-SUFFIX,godoc.org
 DOMAIN-SUFFIX,golang.org
 DOMAIN-SUFFIX,gstatic.com
+DOMAIN-SUFFIX,modernc.org
 DOMAIN-SUFFIX,gv.com
 DOMAIN-SUFFIX,gvt0.com
 DOMAIN-SUFFIX,gvt1.com
