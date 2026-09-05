@@ -39,6 +39,8 @@ DOMAIN-SUFFIX,gmail.com
 DOMAIN-SUFFIX,gmodules.com
 DOMAIN-SUFFIX,godoc.org
 DOMAIN-SUFFIX,golang.org
+DOMAIN-SUFFIX,go.yaml.in
+DOMAIN-SUFFIX,gopkg.in
 DOMAIN-SUFFIX,gstatic.com
 DOMAIN-SUFFIX,modernc.org
 DOMAIN-SUFFIX,gv.com
