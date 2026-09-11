@@ -22,5 +22,3 @@ USER-AGENT,iMeituan*
 DOMAIN-SUFFIX,promcollection.ca
 DOMAIN-SUFFIX,promocollection.com.au
 DOMAIN-SUFFIX,promocollection.com.cn
-DOMAIN-SUFFIX,ccssb.cc
-
