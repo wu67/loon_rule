@@ -49,15 +49,16 @@ async function fetchText(url) {
 
 // ─── CIDR Utilities ───────────────────────────────────────────────────────────
 
-function buildCIDRLines(text) {
+function buildCIDRLines(text, type) {
   return text
     .split('\n')
     .map((line) => {
       const trimmed = line.trim()
-      if (!trimmed) return null
+      if (!trimmed || trimmed.startsWith('#')) return null
       // 如果已经包含 no-resolve，则不重复添加
       if (trimmed.includes('no-resolve')) return trimmed
-      return `${trimmed},no-resolve`
+      const content = type && !trimmed.startsWith('IP-CIDR') ? `${type},${trimmed}` : trimmed
+      return `${content},no-resolve`
     })
     .filter(Boolean)
 }
@@ -232,6 +233,28 @@ async function fetchAndWriteAdsRules() {
   console.error(`[INFO] wrote ${lines.length} ads rules to ${outputFile}`)
 }
 
+async function fetchAndWriteCloudflareCIDR() {
+  const v4Url = 'https://www.cloudflare.com/ips-v4'
+  const v6Url = 'https://www.cloudflare.com/ips-v6'
+  console.error('[INFO] fetching Cloudflare IPv4/IPv6 CIDR rules')
+
+  const [v4Text, v6Text] = await Promise.all([fetchText(v4Url), fetchText(v6Url)])
+  const lines = [...buildCIDRLines(v4Text, 'IP-CIDR'), ...buildCIDRLines(v6Text, 'IP-CIDR6')]
+
+  const header = [
+    '# Converted Cloudflare CIDR rules with no-resolve',
+    `# Source: ${v4Url}, ${v6Url}`,
+    `# Rules: ${lines.length}`,
+    `# Generated: ${new Date().toISOString()}`,
+    '',
+  ]
+  const outputPath = path.resolve(process.cwd(), 'cf.txt')
+  fs.mkdirSync(path.dirname(outputPath) || '.', { recursive: true })
+  fs.writeFileSync(outputPath, header.concat(lines).join('\n') + '\n', { encoding: 'utf8' })
+
+  console.error(`[INFO] wrote ${lines.length} Cloudflare CIDR rules to cf.txt`)
+}
+
 function writeProxyIP(lines) {
   const outputPath = path.resolve(process.cwd(), 'proxy_ip.txt')
   const header = [
@@ -261,6 +284,8 @@ async function main() {
   })
   await runSafely('PCDN conversion', fetchAndWritePCDN)
   // await runSafely('Ads rules conversion', fetchAndWriteAdsRules)
+
+  await runSafely('Cloudflare CIDR conversion', fetchAndWriteCloudflareCIDR)
 }
 
 main().catch((err) => {
