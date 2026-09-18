@@ -291,6 +291,7 @@ DOMAIN-SUFFIX,zohocdn.com
 DOMAIN-SUFFIX,zohostatic.com
 DOMAIN-SUFFIX,sspanel.net
 DOMAIN-SUFFIX,haitunt.org
+DOMAIN-SUFFIX,69shuba.com
 DOMAIN-KEYWORD,giffgaff
 
 # DNS Leak
