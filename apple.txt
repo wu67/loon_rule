@@ -1,6 +1,8 @@
 DOMAIN-SUFFIX,apple.com
 # 处理部分奇葩cdn域名
 DOMAIN-KEYWORD,apple.com
+DOMAIN-SUFFIX,aaplimg.com
+DOMAIN-SUFFIX,apple-dns.net
 DOMAIN-KEYWORD,ioshost.qtlcdn.com
 DOMAIN-SUFFIX,aapl-maps.qtlcdn.com
 DOMAIN-SUFFIX,apple-relay.cloudflare.com
