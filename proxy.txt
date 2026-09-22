@@ -155,6 +155,7 @@ DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,grok.com
 DOMAIN-SUFFIX,x.ai
 DOMAIN-SUFFIX,grok-sandbox.com
+DOMAIN-SUFFIX,grokipedia.com
 
 # > Productivity & Cloud
 DOMAIN-KEYWORD,mega
