@@ -153,6 +153,8 @@ DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-KEYWORD,auth0
 DOMAIN-SUFFIX,identrust.com
 DOMAIN-SUFFIX,grok.com
+DOMAIN-SUFFIX,x.ai
+DOMAIN-SUFFIX,grok-sandbox.com
 
 # > Productivity & Cloud
 DOMAIN-KEYWORD,mega
