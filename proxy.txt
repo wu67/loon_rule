@@ -152,6 +152,7 @@ DOMAIN-SUFFIX,midjourney.com
 DOMAIN-SUFFIX,perplexity.ai
 DOMAIN-KEYWORD,auth0
 DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,grok.com
 
 # > Productivity & Cloud
 DOMAIN-KEYWORD,mega
