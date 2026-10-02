@@ -297,6 +297,7 @@ DOMAIN-SUFFIX,sspanel.net
 DOMAIN-SUFFIX,haitunt.org
 DOMAIN-SUFFIX,69shuba.com
 DOMAIN-KEYWORD,giffgaff
+DOMAIN-SUFFIX,tineye.com
 
 # DNS Leak
 DOMAIN-SUFFIX,dnsleaktest.com
