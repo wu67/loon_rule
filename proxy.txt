@@ -237,6 +237,7 @@ DOMAIN-SUFFIX,6vw.cc
 # > Global NSFW Services
 DOMAIN-KEYWORD,missav
 DOMAIN-KEYWORD,pornhub
+DOMAIN-KEYWORD,porn
 DOMAIN-KEYWORD,xvideos
 DOMAIN-KEYWORD,xnxx
 DOMAIN-SUFFIX,phncdn.com
@@ -248,7 +249,7 @@ DOMAIN-SUFFIX,ehgt.org
 DOMAIN-SUFFIX,wnacg.com
 DOMAIN-SUFFIX,nyaa.si
 DOMAIN-SUFFIX,nhentai.to
-DOMAIN-SUFFIX,nhentai.to
+DOMAIN-SUFFIX,94mt.cc
 
 # bt tracker
 DOMAIN-SUFFIX,acgtracker.com
