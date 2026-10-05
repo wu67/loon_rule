@@ -236,6 +236,8 @@ DOMAIN-SUFFIX,6vw.cc
 
 # > Global NSFW Services
 DOMAIN-KEYWORD,missav
+DOMAIN-SUFFIX,surrit.com
+DOMAIN-SUFFIX,fourhoi.com
 DOMAIN-KEYWORD,pornhub
 DOMAIN-KEYWORD,porn
 DOMAIN-KEYWORD,xvideos
