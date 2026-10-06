@@ -252,6 +252,7 @@ DOMAIN-SUFFIX,wnacg.com
 DOMAIN-SUFFIX,nyaa.si
 DOMAIN-SUFFIX,nhentai.to
 DOMAIN-SUFFIX,94mt.cc
+DOMAIN-SUFFIX,javkok.com
 
 # bt tracker
 DOMAIN-SUFFIX,acgtracker.com
