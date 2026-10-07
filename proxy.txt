@@ -302,6 +302,7 @@ DOMAIN-SUFFIX,haitunt.org
 DOMAIN-SUFFIX,69shuba.com
 DOMAIN-KEYWORD,giffgaff
 DOMAIN-SUFFIX,tineye.com
+DOMAIN-SUFFIX,um-react.app
 
 # DNS Leak
 DOMAIN-SUFFIX,dnsleaktest.com
