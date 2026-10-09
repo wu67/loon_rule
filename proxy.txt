@@ -126,6 +126,7 @@ DOMAIN-KEYWORD,typekit
 DOMAIN-KEYWORD,adobe
 DOMAIN-SUFFIX,f-droid.org
 DOMAIN-SUFFIX,element-plus.org
+DOMAIN-SUFFIX,iterm2.com
 
 # > AI Ecosystem (Web, API, Auth & CDN)
 DOMAIN-KEYWORD,gemini
