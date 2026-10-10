@@ -184,6 +184,7 @@ DOMAIN-SUFFIX,wikipedia.org
 DOMAIN-SUFFIX,wikimedia.org
 DOMAIN-SUFFIX,wordpress.com
 DOMAIN-SUFFIX,reddit.com
+DOMAIN-SUFFIX,reddit.co.jp
 DOMAIN-SUFFIX,redditmedia.com
 DOMAIN-SUFFIX,redditstatic.com
 DOMAIN-SUFFIX,redd.it
