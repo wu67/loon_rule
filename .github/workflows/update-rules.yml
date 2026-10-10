@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  update:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -24,8 +24,8 @@ jobs:
         run: node scripts/convert_to_loon_no_action.js
 
       - name: Commit and push if changed
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@v11
         with:
           message: "chore: update from remote rules"
           add: "reject.txt ip.txt pcdn.txt proxy_ip.txt"
-          token: "${{ secrets.AUTO_GEN_REJECTLIST }}"
+          github_token: "${{ secrets.AUTO_GEN_REJECTLIST }}"
