@@ -2,10 +2,9 @@ name: Update from remote rules
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # 每天 03:00 UTC 更新（可修改）
+    - cron: '0 6 * * *'  # 每天 06:00 UTC 更新
   workflow_dispatch: {}
 
-# 关键：明确声明写权限
 permissions:
   contents: write
 
@@ -14,26 +13,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          persist-credentials: true
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: '24.16.0'
+          node-version: '24.21.0'
 
       - name: Run conversion
-        run: |
-          node scripts/convert_to_loon_no_action.js
+        run: node scripts/convert_to_loon_no_action.js
 
       - name: Commit and push if changed
         uses: EndBug/add-and-commit@v9
         with:
           message: "chore: update from remote rules"
           add: "reject.txt ip.txt pcdn.txt proxy_ip.txt"
-          token: "${{ secrets.AUTO_GEN_REJECTLIST}}"
-          author_name: github-actions[bot]
-          author_email: 41898282+github-actions[bot]@users.noreply.github.com
-          committer_name: github-actions[bot]
-          committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+          token: "${{ secrets.AUTO_GEN_REJECTLIST }}"
