@@ -288,6 +288,7 @@ DOMAIN-SUFFIX,tvunderground.org.ru
 DOMAIN-SUFFIX,wepzone.net
 
 # other
+DOMAIN-SUFFIX,nodeseek.com
 DOMAIN-SUFFIX,ddgksf2013.top
 DOMAIN-SUFFIX,sagernet.org
 DOMAIN-SUFFIX,kelee.one
