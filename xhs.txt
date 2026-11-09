@@ -1,7 +1,10 @@
 DOMAIN-SUFFIX,xiaohongshu.com
 DOMAIN-SUFFIX,xiaohongshu.net
 DOMAIN-SUFFIX,fengkongcloud.com
+DOMAIN-SUFFIX,rednote.com
 DOMAIN-SUFFIX,rnote.com
+DOMAIN-KEYWORD,xhslink
+DOMAIN-KEYWORD,xhsurl
 DOMAIN-KEYWORD,rednotecdn
 DOMAIN-KEYWORD,xhscdn
 # 生动诗章科技 ai搜索, 被收购
