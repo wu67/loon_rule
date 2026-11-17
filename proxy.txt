@@ -128,6 +128,7 @@ DOMAIN-SUFFIX,f-droid.org
 DOMAIN-SUFFIX,element-plus.org
 DOMAIN-SUFFIX,iterm2.com
 DOMAIN-SUFFIX,python.org
+DOMAIN-SUFFIC,debian.org
 
 # > AI Ecosystem (Web, API, Auth & CDN)
 DOMAIN-KEYWORD,gemini
