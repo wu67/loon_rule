@@ -236,6 +236,8 @@ DOMAIN-SUFFIX,graph.org
 DOMAIN-SUFFIX,telegram.me
 DOMAIN-SUFFIX,telegram.org
 DOMAIN-KEYWORD,telegram
+DOMAIN-SUFFIX,swiftgram.app
+DOMAIN-KEYWORD,swiftgram
 
 # my video dl site
 DOMAIN-SUFFIX,miobt.com
