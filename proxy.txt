@@ -1,3 +1,6 @@
+# 把io顶级域名加入代理 这列域名就算没被ban也是很慢或者超强干扰的, 干脆直接代理
+DOMAIN-SUFFIX,io
+
 # > GitHub Ecosystem (Optimized with Keyword)
 DOMAIN-KEYWORD,github
 DOMAIN-KEYWORD,githubusercontent
@@ -291,6 +294,7 @@ DOMAIN-SUFFIX,tvunderground.org.ru
 DOMAIN-SUFFIX,wepzone.net
 
 # other
+DOMAIN-SUFFIX,iina.io
 DOMAIN-SUFFIX,videolan.org
 DOMAIN-SUFFIX,nodeseek.com
 DOMAIN-SUFFIX,ddgksf2013.top
